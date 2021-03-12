@@ -8,12 +8,13 @@ MainObj::MainObj()
 	x_val_ = 0;
 	y_val_ = 0;
 	x_pos_ = 10;
-	y_pos_ = 0;
+	y_pos_ = 200;
 	
 	width_frame_ = 0;
 	height_frame_ = 0;
 	
-	status_ = -1;
+	status_ = STAND;
+	stand_status_ = STAND;
 	
 	input_type_.left_ = 0;
 	input_type_.right_ = 0;
@@ -63,19 +64,10 @@ void MainObj::Set_Clips()
 
 void MainObj::Display(SDL_Renderer* des)
 {
-	/*if (on_ground_ == true) 
-	{
-		if (status_ == MOVE_LEFT)
-		{
-			LoadImg("img//player_left3.png", des);
-		}
-		else if(status_ == MOVE_RIGHT)
-		{
-			LoadImg("img//player_right3.png", des);
-		}
-	}*/
-
-	if((input_type_.left_ == 1 || input_type_.right_ == 1) || input_type_.atk_ == 1 )
+	//UpdatePlayerImg(des);
+	if(input_type_.left_ == 1 || input_type_.right_ == 1 
+		|| input_type_.atk_ == 1 || (input_type_.atk_ == 1 && stand_status_ == STAND_LEFT) 
+		|| (input_type_.atk_ == 1 && stand_status_ == STAND_RIGHT))
 	{
 		frame_++;
 	}
@@ -114,14 +106,7 @@ void MainObj::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
 			status_ = MOVE_RIGHT;
 			input_type_.right_ = 1;
 			input_type_.left_ = 0;
-			if (on_ground_ == true)
-			{
-				LoadImg("img//player_right.png", screen);
-			}
-			else
-			{
-				LoadImg("img//jum_right.png", screen);
-			}
+			UpdatePlayerImg(screen);
 		}
 		break;
 		case SDLK_LEFT:
@@ -129,14 +114,8 @@ void MainObj::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
 			status_ = MOVE_LEFT;
 			input_type_.left_ = 1;
 			input_type_.right_ = 0;
-			if (on_ground_ == true)
-			{
-				LoadImg("img//player_left.png", screen);
-			}
-			else
-			{
-				LoadImg("img//jum_left.png", screen);
-			}
+			UpdatePlayerImg(screen);
+
 		}
 		break;
 		}
@@ -148,21 +127,19 @@ void MainObj::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
 		case SDLK_RIGHT:
 		{
 			input_type_.right_ = 0;
+			stand_status_ = STAND_RIGHT;
+			LoadImg("img//jum_right3.png", screen);
 		}
 		break;
 		case SDLK_LEFT:
 		{
 			input_type_.left_ = 0;
+			stand_status_ = STAND_LEFT;
+			LoadImg("img//jum_left3.png", screen);
 		}
 		break;
 		}
 	}
-
-	/*if (input_type_.left_ == 0 && input_type_.right_ == 0)
-	{
-		status_ = STAND;
-		LoadImg("img//jum_right3.png",screen);
-	}*/
 
 	if (events.type = SDL_MOUSEBUTTONDOWN)
 	{
@@ -170,23 +147,39 @@ void MainObj::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
 		{
 			input_type_.jump_ = 1;
 		}
-		/*else if (events.button.button == SDL_BUTTON_LEFT) 
+		else if (events.button.button == SDL_BUTTON_LEFT) 
 		{
-			status_ = P_ATTACK;
 			input_type_.atk_ = 1;
-			if (input_type_.atk_ == 1) 
+
+			if (stand_status_ == STAND_LEFT)
 			{
-				if (input_type_.left_ == 1)
-				{
-					LoadImg("img//atk_left.png", screen);
-				}
-				else if (input_type_.right_ == 1)
-				{
-					LoadImg("img//atk_right.png", screen);
-				}
-				input_type_.atk_ = 0;
+				LoadImg("img//atk_left.png", screen);
 			}
-		}*/
+			else if (status_ == STAND_RIGHT)
+			{
+				LoadImg("img//atk_right.png", screen);
+			}
+
+			if (status_ == MOVE_LEFT )
+			{
+				LoadImg("img//atk_left.png", screen);
+			}
+			else if (status_ == MOVE_RIGHT )
+			{
+				LoadImg("img//atk_right.png", screen);
+			}
+
+			input_type_.atk_ = 0;
+		}
+	}
+
+	else if (events.type = SDL_MOUSEBUTTONUP)
+	{
+		if (events.button.button == SDL_BUTTON_LEFT)
+		{
+			input_type_.atk_ = 0;
+			stand_status_ = STAND;
+		}
 	}
 }
 
@@ -229,7 +222,6 @@ void MainObj::DoPlayer(Map& map_data)
 			if (x_pos_ > 256)
 			{
 				x_pos_ -= 256;
-				map_x_ -= 256;
 			}
 			else 
 			{
@@ -364,5 +356,31 @@ void MainObj::CheckToMap(Map& map_data)
 	if (y_pos_ > map_data.max_y_)
 	{
 		come_back_time_ = 60;
+	}
+}
+
+void MainObj::UpdatePlayerImg(SDL_Renderer* des)
+{
+	if (on_ground_ == true)
+	{
+		if (status_ == MOVE_LEFT)
+		{
+			LoadImg("img//player_left3.png", des);
+		}
+		else if (status_ == MOVE_RIGHT)
+		{
+			LoadImg("img//player_right3.png", des);
+		}
+	}
+	else
+	{
+		if (status_ == MOVE_LEFT)
+		{
+			LoadImg("img//jum_left3.png", des);
+		}
+		else if (status_ == MOVE_RIGHT)
+		{
+			LoadImg("img//jum_right3.png", des);
+		}
 	}
 }

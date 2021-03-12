@@ -22,7 +22,9 @@ public:
         MOVE_RIGHT = 0,
         MOVE_LEFT = 1,
         P_ATTACK = 2,
-        STAND = 20,
+        STAND_RIGHT = 20,
+        STAND_LEFT = 21,
+        STAND = -1,
     };
 
 
@@ -35,6 +37,7 @@ public:
     void CheckToMap(Map& map_data);
     void SetMapXY(const int map_x, const int map_y) { map_x_ = map_x; map_y_ = map_y; }
     void CenterEntityOnMap(Map& map_data);
+    void UpdatePlayerImg(SDL_Renderer* des);
     
     bool contains(int tiles_value);
     
@@ -52,6 +55,7 @@ private:
     Input input_type_;
     int frame_;
     int status_;
+    int stand_status_;
     bool on_ground_;
 
     int map_x_;

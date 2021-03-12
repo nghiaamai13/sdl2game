@@ -72,7 +72,6 @@ void Close()
 
 int main(int argc, char* argv[])
 {   
-    ImpTimer fps_timer;
 
     if (Init() == false)
         return -1;
@@ -87,9 +86,10 @@ int main(int argc, char* argv[])
 	game_map.LoadTiles(g_screen);
 
     MainObj p_player;
-    p_player.LoadImg("img//player_right.png", g_screen);
+    p_player.LoadImg("img//player_right3.png", g_screen);
     p_player.Set_Clips();
    
+    ImpTimer fps_timer;
     bool is_quit = false;
     while(!is_quit)
     {
@@ -109,7 +109,7 @@ int main(int argc, char* argv[])
 
         Map map_data = game_map.getMap();
 
-        
+  
         game_map.DrawMap(g_screen);
 
         p_player.SetMapXY(map_data.start_x_, map_data.start_y_);
