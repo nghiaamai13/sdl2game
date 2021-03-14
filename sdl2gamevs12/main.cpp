@@ -5,6 +5,7 @@
 #include"game_map.h"
 #include "MainObj.h"
 #include "ImplementTimer.h"
+#include "ThreatObj.h"
 
 BaseObject g_background;
 
@@ -70,6 +71,26 @@ void Close()
     SDL_Quit();
 }
 
+std::vector<ThreatsObject*> MakeThreatList()
+{
+    std::vector<ThreatsObject*> threat_list;
+    ThreatsObject* threat_objs = new ThreatsObject[20];
+    for (int i = 0; i < 20; i++)
+    {
+        ThreatsObject* p_threat = (threat_objs + i);
+        if (p_threat != NULL)
+        {
+            p_threat->LoadImg("img//threat1.png", g_screen);
+            p_threat->SetCLips();
+            p_threat->SetXPos(700 + i * 1200);
+            p_threat->SetYPos(250);
+
+            threat_list.push_back(p_threat);
+        }
+    }
+    return threat_list;
+}
+
 int main(int argc, char* argv[])
 {   
 
@@ -88,6 +109,8 @@ int main(int argc, char* argv[])
     MainObj p_player;
     p_player.LoadImg("img//player_right3.png", g_screen);
     p_player.Set_Clips();
+
+    std::vector<ThreatsObject*> threat_list = MakeThreatList();
    
     ImpTimer fps_timer;
     bool is_quit = false;
@@ -115,8 +138,19 @@ int main(int argc, char* argv[])
         p_player.SetMapXY(map_data.start_x_, map_data.start_y_);
         p_player.DoPlayer(map_data);
         p_player.Display(g_screen);
-       
+
         game_map.SetMap(map_data);
+
+        for (int i = 0; i < threat_list.size(); i++)
+        {
+            ThreatsObject* p_threat = threat_list.at(i);
+            if (p_threat != NULL)
+            {
+                p_threat->SetMapXY(map_data.start_x_, map_data.start_y_);
+                p_threat->DoThreats(map_data);
+                p_threat->Display(g_screen);
+            }
+        }
 
         SDL_RenderPresent(g_screen);
 

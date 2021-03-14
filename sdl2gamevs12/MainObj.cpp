@@ -14,7 +14,6 @@ MainObj::MainObj()
 	height_frame_ = 0;
 	
 	status_ = STAND;
-	stand_status_ = STAND;
 	
 	input_type_.left_ = 0;
 	input_type_.right_ = 0;
@@ -64,10 +63,7 @@ void MainObj::Set_Clips()
 
 void MainObj::Display(SDL_Renderer* des)
 {
-	//UpdatePlayerImg(des);
-	if(input_type_.left_ == 1 || input_type_.right_ == 1 
-		|| input_type_.atk_ == 1 || (input_type_.atk_ == 1 && stand_status_ == STAND_LEFT) 
-		|| (input_type_.atk_ == 1 && stand_status_ == STAND_RIGHT))
+	if(input_type_.left_ == 1 || input_type_.right_ == 1 || input_type_.atk_ == 1)
 	{
 		frame_++;
 	}
@@ -80,7 +76,6 @@ void MainObj::Display(SDL_Renderer* des)
 	{
 		frame_ = 0;
 	}
-
 	if (come_back_time_ == 0) 
 	{
 		rect_.x = x_pos_ - map_x_;
@@ -127,15 +122,11 @@ void MainObj::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
 		case SDLK_RIGHT:
 		{
 			input_type_.right_ = 0;
-			stand_status_ = STAND_RIGHT;
-			LoadImg("img//jum_right3.png", screen);
 		}
 		break;
 		case SDLK_LEFT:
 		{
 			input_type_.left_ = 0;
-			stand_status_ = STAND_LEFT;
-			LoadImg("img//jum_left3.png", screen);
 		}
 		break;
 		}
@@ -150,25 +141,14 @@ void MainObj::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
 		else if (events.button.button == SDL_BUTTON_LEFT) 
 		{
 			input_type_.atk_ = 1;
-
-			if (stand_status_ == STAND_LEFT)
+			if (input_type_.left_ == 1)
 			{
 				LoadImg("img//atk_left.png", screen);
 			}
-			else if (status_ == STAND_RIGHT)
+			else if (input_type_.right_ == 1)
 			{
 				LoadImg("img//atk_right.png", screen);
 			}
-
-			if (status_ == MOVE_LEFT )
-			{
-				LoadImg("img//atk_left.png", screen);
-			}
-			else if (status_ == MOVE_RIGHT )
-			{
-				LoadImg("img//atk_right.png", screen);
-			}
-
 			input_type_.atk_ = 0;
 		}
 	}
@@ -178,7 +158,6 @@ void MainObj::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
 		if (events.button.button == SDL_BUTTON_LEFT)
 		{
 			input_type_.atk_ = 0;
-			stand_status_ = STAND;
 		}
 	}
 }
@@ -225,7 +204,7 @@ void MainObj::DoPlayer(Map& map_data)
 			}
 			else 
 			{
-				x_pos_ = 10;
+				x_pos_ = 15;
 			}
 			y_pos_ = 300;
 			x_val_ = 0;
@@ -372,7 +351,8 @@ void MainObj::UpdatePlayerImg(SDL_Renderer* des)
 			LoadImg("img//player_right3.png", des);
 		}
 	}
-	else
+
+	else if(on_ground_ == false)
 	{
 		if (status_ == MOVE_LEFT)
 		{
@@ -384,3 +364,4 @@ void MainObj::UpdatePlayerImg(SDL_Renderer* des)
 		}
 	}
 }
+

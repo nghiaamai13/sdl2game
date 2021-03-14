@@ -39,6 +39,9 @@
     <ClInclude Include="ImplementTimer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ThreatObj.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -60,6 +63,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ImplementTimer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ThreatObj.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
