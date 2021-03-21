@@ -27,6 +27,7 @@ MainObj::MainObj()
 	map_y_ = 0;
 
 	come_back_time_ = 0;
+    money_count = 0;
 }
 
 MainObj::~MainObj()
@@ -149,17 +150,64 @@ void MainObj::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
 			{
 				LoadImg("img//atk_right.png", screen);
 			}
+
+            BulletObj* p_bullet = new BulletObj();
+
+            p_bullet->LoadImg("img//bullet12.png", screen);
+
+            if(status_ == MOVE_LEFT)
+            {
+                p_bullet->set_bullet_dir(BulletObj::DIR_LEFT);
+                p_bullet->SetRect(this->rect_.x , rect_.y + height_frame_ * 0.25);
+            }
+            else 
+            {            
+                p_bullet->set_bullet_dir(BulletObj::DIR_RIGHT);
+                p_bullet->SetRect(this->rect_.x + width_frame_ - 20 , rect_.y + height_frame_ * 0.25);
+
+            }
+            p_bullet->set_x_val(20);
+            p_bullet->set_is_moving(true);
+
+            p_bullet_list_.push_back(p_bullet);
+
 			input_type_.atk_ = 0;
 		}
 	}
 
-	else if (events.type = SDL_MOUSEBUTTONUP)
+	/*else if (events.type = SDL_MOUSEBUTTONUP)
 	{
 		if (events.button.button == SDL_BUTTON_LEFT)
 		{
 			input_type_.atk_ = 0;
 		}
-	}
+	}*/
+}
+
+void MainObj::HandleBullet(SDL_Renderer* des)
+{
+    for(int i = 0 ; i < p_bullet_list_.size() ; i++)
+    {
+        BulletObj* p_bullet = p_bullet_list_.at(i);
+        if(p_bullet != NULL)
+        {
+            if(p_bullet->get_is_moving() == true)
+            {
+                p_bullet->HandleMove(320 ,160);
+                p_bullet->Render(des);
+            }
+            else 
+            {
+                p_bullet_list_.erase(p_bullet_list_.begin() + i );
+                if(p_bullet != NULL)
+                {
+                    delete p_bullet;
+                    p_bullet = NULL;
+                }
+            }
+        }
+
+    }
 }
 
 void MainObj::DoPlayer(Map& map_data)
@@ -253,6 +301,12 @@ bool MainObj :: contains(int tiles_value)
 	}
 	else return false;
 }
+
+void MainObj::IncreaseMoney()
+{
+    money_count ++;
+}
+
 void MainObj::CheckToMap(Map& map_data)
 {
 	int x1 = 0;
@@ -274,20 +328,39 @@ void MainObj::CheckToMap(Map& map_data)
 	{
 		if (x_val_ > 0) //player move right
 		{
-			if (contains(map_data.tile[y1][x2]) || contains(map_data.tile[y2][x2]))//map_data.tile[y1][x2] != BLANK_TILE || map_data.tile[y2][x2] != BLANK_TILE)
-			{
-				x_pos_ = x2 * TILE_SIZE;
-				x_pos_ -= width_frame_ + 1;
-				x_val_ = 0;
-			}
+            if(map_data.tile[y1][x2] == MONEY_TILE || map_data.tile[y2][x2] == MONEY_TILE )
+            {
+                 map_data.tile[y1][x2] = 0;
+                 map_data.tile[y2][x2] = 0;
+                 IncreaseMoney();
+            }
+
+            else 
+            {
+			    if (contains(map_data.tile[y1][x2]) || contains(map_data.tile[y2][x2]))
+			    {
+				    x_pos_ = x2 * TILE_SIZE;
+				    x_pos_ -= width_frame_ + 1;
+				    x_val_ = 0;
+			    }
+            }
 		}
 		else if (x_val_ < 0) 
 		{
-			if (contains(map_data.tile[y1][x1]) || contains(map_data.tile[y2][x1]))//map_data.tile[y1][x1] != BLANK_TILE || map_data.tile[y2][x1] != BLANK_TILE)
-			{
-				x_pos_ = (x1 + 1) * TILE_SIZE;
-				x_val_ = 0;
-			}
+            if(map_data.tile[y1][x1] == MONEY_TILE || map_data.tile[y2][x1] == MONEY_TILE )
+            {
+                 map_data.tile[y1][x1] = 0;
+                 map_data.tile[y2][x1] = 0;
+                 IncreaseMoney();
+            }
+            else 
+            {
+			    if (contains(map_data.tile[y1][x1]) || contains(map_data.tile[y2][x1]))
+			    {
+				    x_pos_ = (x1 + 1) * TILE_SIZE;
+				    x_val_ = 0;
+			    }
+            }
 		}
 	}
 
@@ -304,21 +377,39 @@ void MainObj::CheckToMap(Map& map_data)
 	{
 		if (y_val_ > 0) 
 		{
-			if (contains(map_data.tile[y2][x1]) || contains(map_data.tile[y2][x2]))//map_data.tile[y2][x1] != BLANK_TILE || map_data.tile[y2][x2] != BLANK_TILE)
-			{
-				y_pos_ = y2 * TILE_SIZE;
-				y_pos_ -= (height_frame_ + 1);
-				y_val_ = 0;
-				on_ground_ = true;
-			}
+            if(map_data.tile[y2][x1] == MONEY_TILE || map_data.tile[y2][x2] == MONEY_TILE )
+            {
+                 map_data.tile[y2][x2] = 0;
+                 map_data.tile[y2][x2] = 0;
+                 IncreaseMoney();
+            }
+            else 
+            {
+			    if (contains(map_data.tile[y2][x1]) || contains(map_data.tile[y2][x2]))
+			    {
+				    y_pos_ = y2 * TILE_SIZE;
+				    y_pos_ -= (height_frame_ + 1);
+				    y_val_ = 0;
+				    on_ground_ = true;
+			    }
+            }
 		}
 		else if (y_val_ < 0)
 		{
-			if (contains(map_data.tile[y1][x1]) || contains(map_data.tile[y1][x2]))//map_data.tile[y1][x1] != BLANK_TILE || map_data.tile[y1][x2] != BLANK_TILE)
-			{
-				y_pos_ = (y1 + 1) * TILE_SIZE;
-				y_val_ = 0;
-			}
+            if(map_data.tile[y1][x1] == MONEY_TILE || map_data.tile[y1][x2] == MONEY_TILE )
+            { 
+                 map_data.tile[y1][x1] = 0;
+                 map_data.tile[y1][x2] = 0;
+                 IncreaseMoney();
+            }
+            else
+            {
+			    if (contains(map_data.tile[y1][x1]) || contains(map_data.tile[y1][x2]))
+			    {
+				    y_pos_ = (y1 + 1) * TILE_SIZE;
+				    y_val_ = 0;
+			    }
+            }
 		}
 	}
 	x_pos_ += x_val_;

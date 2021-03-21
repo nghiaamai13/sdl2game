@@ -1,15 +1,18 @@
 #ifndef MAIN_OBJECT_H_
 #define MAIN_OBJECT_H_
 
+#include "stdafx.h"'
 #include "CommonFunc.h"
 #include "BaseObject.h"
-#include "stdafx.h"
+#include "BulletObject.h"
 
 #define GRAVITY_SPEED 0.8
 #define MAX_FALL_SPEED 10
-#define PLAYER_SPEED 5
-#define PLAYER_JUMP_VALUE 20
+#define PLAYER_SPEED 8
+#define PLAYER_JUMP_VALUE 25
 #define MAX_FRAME_CLIP 8
+#define MONEY_TILE 290
+
 
 class MainObj : public BaseObject
 {
@@ -41,7 +44,18 @@ public:
     
     bool contains(int tiles_value);
     
+    void set_bullet_list(std :: vector <BulletObj*> bullet_list)
+    {
+        p_bullet_list_ = bullet_list;
+    }
+    std :: vector <BulletObj*> get_bullet_list() const {return p_bullet_list_;}
+    void HandleBullet(SDL_Renderer* des );
+    
+    void IncreaseMoney();
+
 private:
+    std :: vector <BulletObj*> p_bullet_list_;
+
     float x_val_;
     float y_val_;
 
@@ -62,6 +76,8 @@ private:
     int map_y_;
     
     int come_back_time_;
+
+    int money_count;
 };
 
 #endif

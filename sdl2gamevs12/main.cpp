@@ -130,17 +130,9 @@ int main(int argc, char* argv[])
         SDL_RenderClear(g_screen);
         g_background.Render(g_screen, NULL);
 
+
+
         Map map_data = game_map.getMap();
-
-  
-        game_map.DrawMap(g_screen);
-
-        p_player.SetMapXY(map_data.start_x_, map_data.start_y_);
-        p_player.DoPlayer(map_data);
-        p_player.Display(g_screen);
-
-        game_map.SetMap(map_data);
-
         for (int i = 0; i < threat_list.size(); i++)
         {
             ThreatsObject* p_threat = threat_list.at(i);
@@ -151,6 +143,17 @@ int main(int argc, char* argv[])
                 p_threat->Display(g_screen);
             }
         }
+  
+        game_map.DrawMap(g_screen);
+
+        p_player.HandleBullet(g_screen);
+        p_player.SetMapXY(map_data.start_x_, map_data.start_y_);
+        p_player.DoPlayer(map_data);
+        p_player.Display(g_screen);
+
+        game_map.SetMap(map_data);
+
+
 
         SDL_RenderPresent(g_screen);
 
