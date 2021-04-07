@@ -13,3 +13,7 @@ project made from visual studio 2012
 - 14/03/2020 3rd commit on git
    + them threat
    + sua rat nhieu map 
+
+-21/03/2020 4st commit 
+   + them bullet obj
+   + them tinh nang an tien vang
