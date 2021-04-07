@@ -74,6 +74,30 @@ void Close()
 std::vector<ThreatsObject*> MakeThreatList()
 {
     std::vector<ThreatsObject*> threat_list;
+    
+    //MOVING THREAT
+    ThreatsObject* dynamic_threat = new ThreatsObject[40];
+    for (int i = 0; i < 20; i++) 
+    {
+        ThreatsObject* p_threat = (dynamic_threat + i);
+        if (p_threat != NULL)
+        {
+            p_threat->LoadImg("img//threat_left.png", g_screen);
+            p_threat->SetCLips();
+            p_threat->set_type_move(ThreatsObject::MOVING_THREAT);
+            p_threat->SetXPos(500 + i * 1150);
+            p_threat->SetYPos(250);
+
+            int pos1 = p_threat->GetXPos() - 60;
+            int pos2 = p_threat->GetXPos() + 60;
+            
+            p_threat->set_animation_pos(pos1, pos2);
+            p_threat->set_input_left(1);
+            threat_list.push_back(p_threat);
+        }
+    }
+
+    //STATIC_THREAT
     ThreatsObject* threat_objs = new ThreatsObject[20];
     for (int i = 0; i < 20; i++)
     {
@@ -82,6 +106,8 @@ std::vector<ThreatsObject*> MakeThreatList()
         {
             p_threat->LoadImg("img//threat1.png", g_screen);
             p_threat->SetCLips();
+            p_threat->set_type_move(ThreatsObject::STATIC_THREAT);
+            p_threat->set_input_left(0);
             p_threat->SetXPos(700 + i * 1200);
             p_threat->SetYPos(250);
 
@@ -126,11 +152,9 @@ int main(int argc, char* argv[])
             p_player.HandleInputAction(g_event, g_screen);
 
         }
-        //SDL_SetRenderDrawColor(g_screen, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR);
+ 
         SDL_RenderClear(g_screen);
         g_background.Render(g_screen, NULL);
-
-
 
         Map map_data = game_map.getMap();
         for (int i = 0; i < threat_list.size(); i++)
@@ -139,6 +163,7 @@ int main(int argc, char* argv[])
             if (p_threat != NULL)
             {
                 p_threat->SetMapXY(map_data.start_x_, map_data.start_y_);
+                p_threat->ImpMovement(g_screen);
                 p_threat->DoThreats(map_data);
                 p_threat->Display(g_screen);
             }

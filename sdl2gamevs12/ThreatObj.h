@@ -8,12 +8,19 @@
 #define THREAT_FRAME 8
 #define THREAT_GRAVITY_SPEED 0.8
 #define THREAT_MAX_FALL_SPEED 10
+#define THREAT_SPEED 3
 
 class ThreatsObject : public BaseObject
 {
 public:
 	ThreatsObject();
 	~ThreatsObject();
+
+	enum ThreatType
+	{
+		STATIC_THREAT = 0,
+		MOVING_THREAT = 1,
+  	};
 
 	void SetXVal(const float& xVal) { x_val_ = xVal; }
 	void SetYVal(const float& yVal) { y_val_ = yVal; }
@@ -27,10 +34,16 @@ public:
 	void Display(SDL_Renderer* des);
 	int GetHeightFrame() const { return height_frame_; }
 	int GetWidthFrame() const { return width_frame_; }
+	
+	void InitThreat();
 	void DoThreats(Map& g_map_);
 	void CheckToMap(Map& g_map_);
 	bool contains(int tiles_value);
 
+	void set_type_move(const int& typeMove) { type_movement = typeMove; }
+	void set_animation_pos(const int& pos_a, const int& pos_b) { animation_a_ = pos_a, animation_b_ = pos_b; }
+	void set_input_left(const int& ip_left) { input_type_.left_ = ip_left; }
+	void ImpMovement(SDL_Renderer* screen);
 private:
 
 	float x_pos_;
@@ -49,8 +62,12 @@ private:
 	int frame_;
 
 	int on_ground_;
-
-
+	//MOVING THREAT
+	int type_movement;
+	int animation_a_;
+	int animation_b_;
+	
+	Input input_type_;
 
 };
 

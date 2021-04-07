@@ -16,11 +16,17 @@ ThreatsObject :: ThreatsObject()
 	
 	frame_ = 0;
 
+	animation_a_ = 0;
+	animation_b_ = 0;
+
+	input_type_.left_ = 0;
+
+	type_movement = STATIC_THREAT;
 }
 
 ThreatsObject :: ~ThreatsObject()
 {
-	Free();
+	
 }
 
 bool ThreatsObject::LoadImg(std::string path, SDL_Renderer* screen)
@@ -79,23 +85,43 @@ void ThreatsObject::DoThreats(Map& g_map)
 		{
 			y_val_ = THREAT_MAX_FALL_SPEED;
 		}
+		if (input_type_.left_ == 1)
+		{
+			x_val_ -= THREAT_SPEED;
+		}
+		else if (input_type_.right_ == 1)
+		{
+			x_val_ += THREAT_SPEED;
+		}
 		CheckToMap(g_map);
 	}
 	else if (come_back_time > 0)
 	{
-		x_val_ = 0;
-		y_val_ = 0;
-		if (x_pos_ > 256)
+		come_back_time--;
+		if (come_back_time == 0)
 		{
-			x_pos_ -= 256;
+			InitThreat();
 		}
-		else
-		{
-			x_pos_ = 15;
-		}
-		y_pos_ = 300;
-		come_back_time = 0;
 	}
+}
+
+void ThreatsObject::InitThreat()
+{
+	x_val_ = 0;
+	y_val_ = 0;
+	if (x_pos_ > 256) // = 4 TILES
+	{
+		x_pos_ -= 256;
+		animation_a_ -= 256;
+		animation_b_ -= 256;
+	}
+	else
+	{
+		x_pos_ = 15;
+	}
+	y_pos_ = 300;
+	come_back_time = 0;
+	input_type_.left_ = 1;
 }
 
 bool ThreatsObject::contains(int tiles_value)
@@ -108,8 +134,8 @@ bool ThreatsObject::contains(int tiles_value)
 		&& tiles_value != 1 && tiles_value != 2 && tiles_value != 3
 		&& tiles_value != 4 && tiles_value != 30 && tiles_value != 33
 		&& tiles_value != 59 && tiles_value != 62 && tiles_value != 151
-		&& tiles_value != 204 && tiles_value != 233
-		&& tiles_value != 220 && tiles_value != 249 && tiles_value != 0)
+		&& tiles_value != 204 && tiles_value != 233 && tiles_value != 290
+		&& tiles_value != 220 && tiles_value != 249 && tiles_value != 0 )
 	{
 		return true;
 	}
@@ -200,3 +226,38 @@ void ThreatsObject::CheckToMap(Map& g_map)
 	}
 }
 
+
+// MOVING THREAT
+
+void ThreatsObject::ImpMovement(SDL_Renderer* screen)
+{
+	if (type_movement == STATIC_THREAT) 
+	{
+		;
+	}
+	else 
+	{
+		if (on_ground_ == true)
+		{
+			if (x_pos_ > animation_b_)
+			{
+				input_type_.left_ = 1;
+				input_type_.right_ = 0;
+				LoadImg("img//threat_left.png", screen);
+			}
+			else if (x_pos_ < animation_a_)
+			{
+				input_type_.left_ = 0;
+				input_type_.right_ = 1;
+				LoadImg("img//threat_right.png", screen);
+			}
+		}
+		else
+		{
+			if (input_type_.left_ == 1)
+			{
+				LoadImg("img//threat_left.png", screen);
+			}
+		}
+	}
+}
