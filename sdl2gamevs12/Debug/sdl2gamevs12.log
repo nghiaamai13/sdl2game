@@ -4,5 +4,26 @@ g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(88): warning C4244: 'argument'
 g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(91): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
 g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(92): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
 g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(111): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
-g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(160): warning C4018: '<' : signed/unsigned mismatch
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(161): warning C4018: '<' : signed/unsigned mismatch
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(184): warning C4018: '<' : signed/unsigned mismatch
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(189): warning C4018: '<' : signed/unsigned mismatch
+  ThreatObj.cpp
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\threatobj.cpp(62): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\threatobj.cpp(63): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\threatobj.cpp(83): warning C4305: '+=' : truncation from 'double' to 'float'
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\threatobj.cpp(156): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\threatobj.cpp(157): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\threatobj.cpp(159): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\threatobj.cpp(160): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\threatobj.cpp(168): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\threatobj.cpp(177): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\threatobj.cpp(185): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\threatobj.cpp(186): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\threatobj.cpp(188): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\threatobj.cpp(189): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\threatobj.cpp(197): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\threatobj.cpp(207): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\threatobj.cpp(221): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\threatobj.cpp(240): warning C4805: '==' : unsafe mix of type 'int' and type 'bool' in operation
+  Generating Code...
   sdl2gamevs12.vcxproj -> G:\C+\sdl2vs12\sdl2gamevs12\Debug\sdl2gamevs12.exe

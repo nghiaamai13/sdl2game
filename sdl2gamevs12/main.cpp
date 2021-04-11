@@ -82,7 +82,7 @@ std::vector<ThreatsObject*> MakeThreatList()
         ThreatsObject* p_threat = (dynamic_threat + i);
         if (p_threat != NULL)
         {
-            p_threat->LoadImg("img//threat_left.png", g_screen);
+            p_threat->LoadImg("img//threat_left1.png", g_screen);
             p_threat->SetCLips();
             p_threat->set_type_move(ThreatsObject::MOVING_THREAT);
             p_threat->SetXPos(500 + i * 1150);
@@ -104,7 +104,7 @@ std::vector<ThreatsObject*> MakeThreatList()
         ThreatsObject* p_threat = (threat_objs + i);
         if (p_threat != NULL)
         {
-            p_threat->LoadImg("img//threat1.png", g_screen);
+            p_threat->LoadImg("img//threat_left.png", g_screen);
             p_threat->SetCLips();
             p_threat->set_type_move(ThreatsObject::STATIC_THREAT);
             p_threat->set_input_left(0);
@@ -139,6 +139,7 @@ int main(int argc, char* argv[])
     std::vector<ThreatsObject*> threat_list = MakeThreatList();
    
     ImpTimer fps_timer;
+    
     bool is_quit = false;
     while(!is_quit)
     {
@@ -178,7 +179,36 @@ int main(int argc, char* argv[])
 
         game_map.SetMap(map_data);
 
+        //COLLISION
+        std::vector<BulletObj*> bullet_arr = p_player.get_bullet_list();
+        for (int r = 0; r < bullet_arr.size(); r++)
+        {
+            BulletObj* p_bullet = bullet_arr.at(r);
+            if (p_bullet != NULL)
+            {
+                for (int t = 0; t < threat_list.size(); t++)
+                {
+                    ThreatsObject* obj_threat = threat_list.at(t);
+                    if (obj_threat != NULL)
+                    {
+                        SDL_Rect threatRect;
+                        threatRect.x = obj_threat->GetRect().x;
+                        threatRect.y = obj_threat->GetRect().y;
+                        threatRect.w = obj_threat->GetWidthFrame();
+                        threatRect.h = obj_threat->GetHeightFrame();
 
+                        SDL_Rect bulletRect = p_bullet->GetRect();
+                        bool isColide = SDLCommonFunc::CheckCollision(bulletRect, threatRect);
+                        if (isColide)
+                        {
+                            p_player.RemoveBulletHit(r);
+                            obj_threat->Free();
+                            threat_list.erase(threat_list.begin() + t);
+                        }
+                    }
+                }
+            }
+        }
 
         SDL_RenderPresent(g_screen);
 
