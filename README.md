@@ -4,7 +4,7 @@ project made from visual studio 2012
 
 - 09/03/2021 1st commit : 
    + dang hoc lam game sdl2 theo https://www.youtube.com/watch?v=q1WzniyeGTU&list=PLR7NDiX0QsfTIEQUeYCfc2MyCquX0ig9V den bai so 8
-  (code theo code mau trong video va moi chi thay doi do hoa game) (p/s : VIDEO K CO SOURCE CODE! )
+  (code theo code mau trong video va moi chi thay doi do hoa game) (p/s : VIDEO chi huong dan )
 
 - 12/03/2021 2nd commit :
    + tiep tuc hoc lam game.
@@ -18,6 +18,10 @@ project made from visual studio 2012
    + them bullet obj
    + them tinh nang an tien vang
 
--07/04/2021 5th commit
+-07/04/2021 5th commit:
    +hoan thien map
    +moving_threat
+
+-11/04
+   +check va cham #1 :player bullet to threat
+   +hoan thien map
