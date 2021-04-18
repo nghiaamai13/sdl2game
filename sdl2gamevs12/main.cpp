@@ -97,7 +97,7 @@ std::vector<ThreatsObject*> MakeThreatList()
         }
     }
 
-    //STATIC_THREAT
+    //STATIC_THREAT_CAN_SHOOT   
     ThreatsObject* threat_objs = new ThreatsObject[20];
     for (int i = 0; i < 20; i++)
     {
@@ -111,10 +111,14 @@ std::vector<ThreatsObject*> MakeThreatList()
             p_threat->SetXPos(700 + i * 1200);
             p_threat->SetYPos(250);
 
+            BulletObj* t_bullet = new BulletObj;
+            p_threat->InitBullet(t_bullet, g_screen);
+            
             threat_list.push_back(p_threat);
         }
     }
     return threat_list;
+
 }
 
 int main(int argc, char* argv[])
@@ -133,7 +137,7 @@ int main(int argc, char* argv[])
 	game_map.LoadTiles(g_screen);
 
     MainObj p_player;
-    p_player.LoadImg("img//player_right3.png", g_screen);
+    p_player.LoadImg("img//player_right.png", g_screen);
     p_player.Set_Clips();
 
     std::vector<ThreatsObject*> threat_list = MakeThreatList();
@@ -166,6 +170,7 @@ int main(int argc, char* argv[])
                 p_threat->SetMapXY(map_data.start_x_, map_data.start_y_);
                 p_threat->ImpMovement(g_screen);
                 p_threat->DoThreats(map_data);
+                p_threat->MakeBullet(g_screen, SCREEN_WIDTH, SCREEN_HEIGHT);
                 p_threat->Display(g_screen);
             }
         }
@@ -221,7 +226,16 @@ int main(int argc, char* argv[])
                 SDL_Delay(delayed_time);
         }
     }
-    
+    for (int i = 0; i < threat_list.size(); ++i)
+    {
+        ThreatsObject* p_threat = threat_list.at(i);
+        if (p_threat)
+        {
+            p_threat->Free();
+            p_threat = NULL;
+        }
+    }
+    threat_list.clear();
     Close();
 
     return 0;

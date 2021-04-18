@@ -4,6 +4,7 @@
 #include"stdafx.h"
 #include"CommonFunc.h"
 #include "BaseObject.h"
+#include "BulletObject.h"
 
 #define THREAT_FRAME 8
 #define THREAT_GRAVITY_SPEED 0.8
@@ -44,6 +45,13 @@ public:
 	void set_animation_pos(const int& pos_a, const int& pos_b) { animation_a_ = pos_a, animation_b_ = pos_b; }
 	void set_input_left(const int& ip_left) { input_type_.left_ = ip_left; }
 	void ImpMovement(SDL_Renderer* screen);
+
+	//SHOOTING THREATS IMP BULLET
+	std::vector<BulletObj*> get_bullet_list() const {return t_bullet_list_; }
+	void set_bullet_list(const std::vector<BulletObj*>& tBlList) { t_bullet_list_ = tBlList; }
+	void InitBullet(BulletObj* t_bullet, SDL_Renderer* screen);
+	void MakeBullet(SDL_Renderer* screen, const int& t_x_border, const int& t_y_border);
+	
 private:
 
 	float x_pos_;
@@ -68,6 +76,10 @@ private:
 	int animation_b_;
 	
 	Input input_type_;
+
+	//imp bullet
+	std::vector<BulletObj*> t_bullet_list_;
+
 
 };
 

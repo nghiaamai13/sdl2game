@@ -261,3 +261,45 @@ void ThreatsObject::ImpMovement(SDL_Renderer* screen)
 		}
 	}
 }
+
+void ThreatsObject::InitBullet(BulletObj* t_bullet, SDL_Renderer* screen)
+{
+	if(t_bullet != NULL)
+	{
+		t_bullet->LoadImg("img//laser_bullet.png", screen);
+		t_bullet->set_is_moving(true);
+		t_bullet->set_bullet_dir(BulletObj::DIR_LEFT);
+		t_bullet->SetRect(rect_.x + 25, rect_.y + 20);
+		t_bullet->set_x_val(15);
+		t_bullet_list_.push_back(t_bullet);
+	}
+}
+
+void ThreatsObject::MakeBullet(SDL_Renderer* screen, const int& t_x_border, const int& t_y_border)
+{
+	for (int i = 0; i < t_bullet_list_.size(); ++i)
+	{
+		BulletObj* t_bullet = t_bullet_list_.at(i);
+		if (t_bullet != NULL)
+		{
+			if (t_bullet->get_is_moving())
+			{
+				int bullet_distance = rect_.x - t_bullet->GetRect().x + width_frame_;
+				if (bullet_distance < 250 && bullet_distance > 0)
+				{
+					t_bullet->HandleMove(t_x_border, t_y_border);
+					t_bullet->Render(screen);
+				}
+				else 
+				{
+					t_bullet->set_is_moving(false);
+				}
+			}
+			else
+			{
+				t_bullet->set_is_moving(true);
+				t_bullet->SetRect(rect_.x + 25, rect_.y + 20);
+			}
+		}
+	}
+}

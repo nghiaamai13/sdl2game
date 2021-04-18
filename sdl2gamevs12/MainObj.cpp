@@ -19,7 +19,7 @@ MainObj::MainObj()
 	input_type_.right_ = 0;
 	input_type_.jump_ = 0;
 	input_type_.down_ = 0;
-	input_type_.atk_ = 0;
+	//input_type_.atk_ = 0;
 
 	on_ground_ = false;
 	
@@ -64,7 +64,7 @@ void MainObj::Set_Clips()
 
 void MainObj::Display(SDL_Renderer* des)
 {
-	if(input_type_.left_ == 1 || input_type_.right_ == 1 || input_type_.atk_ == 1)
+	if(input_type_.left_ == 1 || input_type_.right_ == 1)// || input_type_.atk_ == 1)
 	{
 		frame_++;
 	}
@@ -133,7 +133,7 @@ void MainObj::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
 		}
 	}
 
-	if (events.type = SDL_MOUSEBUTTONDOWN)
+	if (events.type == SDL_MOUSEBUTTONDOWN)
 	{
 		if(events.button.button == SDL_BUTTON_RIGHT)
 		{
@@ -141,26 +141,26 @@ void MainObj::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
 		}
 		else if (events.button.button == SDL_BUTTON_LEFT) 
 		{
-			input_type_.atk_ = 1;
-			if (input_type_.left_ == 1)
+			//input_type_.atk_ = 1;
+			/*if (input_type_.left_ == 1)
 			{
 				LoadImg("img//atk_left.png", screen);
 			}
 			else if (input_type_.right_ == 1)
 			{
 				LoadImg("img//atk_right.png", screen);
-			}
+			}*/
 
             BulletObj* p_bullet = new BulletObj();
 
-            p_bullet->LoadImg("img//bullet12.png", screen);
+            p_bullet->LoadImg("img//sphere_bullet.png",screen);
 
             if(status_ == MOVE_LEFT)
             {
                 p_bullet->set_bullet_dir(BulletObj::DIR_LEFT);
                 p_bullet->SetRect(this->rect_.x , rect_.y + height_frame_ * 0.25);
             }
-            else 
+            else if(status_== MOVE_RIGHT)
             {            
                 p_bullet->set_bullet_dir(BulletObj::DIR_RIGHT);
                 p_bullet->SetRect(this->rect_.x + width_frame_ - 20 , rect_.y + height_frame_ * 0.25);
@@ -171,17 +171,8 @@ void MainObj::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
 
             p_bullet_list_.push_back(p_bullet);
 
-			input_type_.atk_ = 0;
 		}
 	}
-
-	/*else if (events.type = SDL_MOUSEBUTTONUP)
-	{
-		if (events.button.button == SDL_BUTTON_LEFT)
-		{
-			input_type_.atk_ = 0;
-		}
-	}*/
 }
 
 void MainObj::HandleBullet(SDL_Renderer* des)
@@ -193,7 +184,7 @@ void MainObj::HandleBullet(SDL_Renderer* des)
         {
             if(p_bullet->get_is_moving() == true)
             {
-                p_bullet->HandleMove(320 ,160);
+                p_bullet->HandleMove(1280 ,640);
                 p_bullet->Render(des);
             }
             else 
@@ -451,11 +442,11 @@ void MainObj::UpdatePlayerImg(SDL_Renderer* des)
 	{
 		if (status_ == MOVE_LEFT)
 		{
-			LoadImg("img//player_left3.png", des);
+			LoadImg("img//player_left.png", des);
 		}
 		else if (status_ == MOVE_RIGHT)
 		{
-			LoadImg("img//player_right3.png", des);
+			LoadImg("img//player_right.png", des);
 		}
 	}
 
@@ -463,11 +454,11 @@ void MainObj::UpdatePlayerImg(SDL_Renderer* des)
 	{
 		if (status_ == MOVE_LEFT)
 		{
-			LoadImg("img//jum_left3.png", des);
+			LoadImg("img//jum_left.png", des);
 		}
 		else if (status_ == MOVE_RIGHT)
 		{
-			LoadImg("img//jum_right3.png", des);
+			LoadImg("img//jum_right.png", des);
 		}
 	}
 }

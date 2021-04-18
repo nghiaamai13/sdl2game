@@ -6,10 +6,10 @@
 #include "BaseObject.h"
 #include "BulletObject.h"
 
-#define GRAVITY_SPEED 0.8
-#define MAX_FALL_SPEED 10
-#define PLAYER_SPEED 8
-#define PLAYER_JUMP_VALUE 25
+#define GRAVITY_SPEED 0.9
+#define MAX_FALL_SPEED 12
+#define PLAYER_SPEED 6.5
+#define PLAYER_JUMP_VALUE 23
 #define MAX_FRAME_CLIP 8
 #define MONEY_TILE 290
 
@@ -22,12 +22,10 @@ public:
 
     enum MovementType
     {
-        MOVE_RIGHT = 0,
-        MOVE_LEFT = 1,
-        P_ATTACK = 2,
-        STAND_RIGHT = 20,
-        STAND_LEFT = 21,
-        STAND = -1,
+        MOVE_RIGHT = 1,
+        MOVE_LEFT = 2,
+        STAND = 0,
+        P_ATTACK = 3,
     };
 
 
