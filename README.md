@@ -14,14 +14,18 @@ project made from visual studio 2012
    + them threat
    + sua rat nhieu map 
 
--21/03/2021 4th commit 
+- 21/03/2021 4th commit 
    + them bullet obj
    + them tinh nang an tien vang
 
--07/04/2021 5th commit:
-   +hoan thien map
-   +moving_threat
+- 07/04/2021 5th commit
+   + hoan thien map
+   + moving_threat
 
--11/04
-   +check va cham #1 :player bullet to threat
-   +hoan thien map
+- 11/04/2021 6th commit
+   + check va cham #1 :player bullet to threat
+   + hoan thien map
+
+- 18/04/2021 7th commit
+   + threat_can_Shoot
+   + toi uu threat
