@@ -33,6 +33,7 @@ public:
     void Display(SDL_Renderer* des);
     void HandleInputAction(SDL_Event events, SDL_Renderer* screen);
     void Set_Clips();
+    SDL_Rect GetRectFrame();
 
     void DoPlayer(Map& map_data);
     void CheckToMap(Map& map_data);
@@ -52,6 +53,10 @@ public:
     void RemoveBulletHit(const int& idx);
 
     void IncreaseMoney();
+    void IncreaseFallCount();
+
+    int get_fall_count() const {return fall_count; }
+    void set_comeback_time(const int& cb_time) { come_back_time_ = cb_time;}
 
 private:
     std :: vector <BulletObj*> p_bullet_list_;
@@ -78,6 +83,8 @@ private:
     int come_back_time_;
 
     int money_count;
+
+    int fall_count;
 };
 
 #endif

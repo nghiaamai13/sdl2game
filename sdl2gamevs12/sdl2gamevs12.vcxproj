@@ -86,6 +86,7 @@
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="BulletObject.h" />
     <ClInclude Include="CommonFunc.h" />
+    <ClInclude Include="ExplosionFrames.h" />
     <ClInclude Include="game_map.h" />
     <ClInclude Include="ImplementTimer.h" />
     <ClInclude Include="MainObj.h" />
@@ -97,6 +98,7 @@
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="BulletObject.cpp" />
     <ClCompile Include="CommonFunc.cpp" />
+    <ClCompile Include="ExplosionFrames.cpp" />
     <ClCompile Include="game_map.cpp" />
     <ClCompile Include="ImplementTimer.cpp" />
     <ClCompile Include="main.cpp" />

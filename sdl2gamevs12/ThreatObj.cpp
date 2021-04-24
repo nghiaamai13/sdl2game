@@ -40,6 +40,32 @@ bool ThreatsObject::LoadImg(std::string path, SDL_Renderer* screen)
 	return ret;
 }
 
+SDL_Rect ThreatsObject::GetRectFrame()
+{
+	SDL_Rect rect;
+	rect.x = rect_.x;
+	rect.y = rect_.y;
+	rect.w = width_frame_;
+	rect.h = height_frame_;
+	return rect;
+}
+
+/*void ThreatsObject::RemoveBulletHit(const int& idx)
+{
+	int size = t_bullet_list_.size();
+	if (size > 0 && idx < size)
+	{
+		BulletObj* p_bullet = t_bullet_list_.at(idx);
+		t_bullet_list_.erase(t_bullet_list_.begin() + idx);
+
+		if (p_bullet)
+		{
+			delete p_bullet;
+			p_bullet = NULL;
+		}
+	}
+}*/
+
 void ThreatsObject::SetCLips()
 {
 	if (width_frame_ > 0 && height_frame_ > 0)
@@ -269,7 +295,7 @@ void ThreatsObject::InitBullet(BulletObj* t_bullet, SDL_Renderer* screen)
 		t_bullet->LoadImg("img//laser_bullet.png", screen);
 		t_bullet->set_is_moving(true);
 		t_bullet->set_bullet_dir(BulletObj::DIR_LEFT);
-		t_bullet->SetRect(rect_.x + 25, rect_.y + 20);
+		t_bullet->SetRect(x_pos_ + 25, y_pos_ + 20);
 		t_bullet->set_x_val(15);
 		t_bullet_list_.push_back(t_bullet);
 	}
@@ -285,7 +311,7 @@ void ThreatsObject::MakeBullet(SDL_Renderer* screen, const int& t_x_border, cons
 			if (t_bullet->get_is_moving())
 			{
 				int bullet_distance = rect_.x - t_bullet->GetRect().x + width_frame_;
-				if (bullet_distance < 250 && bullet_distance > 0)
+				if (bullet_distance < THREAT_BULLET_DISTANCE && bullet_distance > 0)
 				{
 					t_bullet->HandleMove(t_x_border, t_y_border);
 					t_bullet->Render(screen);
@@ -303,3 +329,4 @@ void ThreatsObject::MakeBullet(SDL_Renderer* screen, const int& t_x_border, cons
 		}
 	}
 }
+

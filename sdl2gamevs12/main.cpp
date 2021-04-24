@@ -3,9 +3,10 @@
 #include"CommonFunc.h"
 #include"BaseObject.h"
 #include"game_map.h"
-#include "MainObj.h"
-#include "ImplementTimer.h"
-#include "ThreatObj.h"
+#include"MainObj.h"
+#include"ImplementTimer.h"
+#include"ThreatObj.h"
+#include"ExplosionFrames.h"
 
 BaseObject g_background;
 
@@ -115,6 +116,7 @@ std::vector<ThreatsObject*> MakeThreatList()
             p_threat->InitBullet(t_bullet, g_screen);
             
             threat_list.push_back(p_threat);
+            
         }
     }
     return threat_list;
@@ -123,7 +125,6 @@ std::vector<ThreatsObject*> MakeThreatList()
 
 int main(int argc, char* argv[])
 {   
-
     if (Init() == false)
         return -1;
     if (LoadBackground() == false)
@@ -139,6 +140,14 @@ int main(int argc, char* argv[])
     MainObj p_player;
     p_player.LoadImg("img//player_right.png", g_screen);
     p_player.Set_Clips();
+
+    ExplosionFrames exp_threat;
+    bool threxp_success = exp_threat.LoadImg("img//exp1.png", g_screen);
+    if (!threxp_success) return -1;
+    exp_threat.set_clips();
+
+    int num_fall = 0;
+    int num_bullet_hit = 0;
 
     std::vector<ThreatsObject*> threat_list = MakeThreatList();
    
@@ -162,6 +171,10 @@ int main(int argc, char* argv[])
         g_background.Render(g_screen, NULL);
 
         Map map_data = game_map.getMap();
+        game_map.DrawMap(g_screen);
+        
+        num_fall = p_player.get_fall_count();
+        int num_die = num_fall + num_bullet_hit;
         for (int i = 0; i < threat_list.size(); i++)
         {
             ThreatsObject* p_threat = threat_list.at(i);
@@ -172,10 +185,39 @@ int main(int argc, char* argv[])
                 p_threat->DoThreats(map_data);
                 p_threat->MakeBullet(g_screen, SCREEN_WIDTH, SCREEN_HEIGHT);
                 p_threat->Display(g_screen);
+                //Colide t_bullet p_player
+                SDL_Rect rect_player = p_player.GetRectFrame();
+
+                bool isCol1 = false;
+                std::vector<BulletObj*> threatBulletList = p_threat->get_bullet_list();
+
+                for (int k = 0; k < threatBulletList.size(); ++k)
+                {
+                    BulletObj* pt_bullet = threatBulletList.at(k);
+                    if (pt_bullet != NULL)
+                    {
+                        isCol1 = SDLCommonFunc::CheckCollision(pt_bullet->GetRect(), rect_player);
+                        if (isCol1 == true)
+                        {
+                            //p_threat->RemoveBulletHit(k);
+                            //break;
+                        }
+                    }
+                }
+                //Colide player : threat
+                SDL_Rect rect_threat = p_threat->GetRectFrame();
+                bool isCol2 = SDLCommonFunc::CheckCollision(rect_threat, rect_player);
+                
+                //PLAYER DIED
+                if ( isCol2 || isCol1)
+                {
+                    num_bullet_hit++; 
+                    p_player.SetRect(0, 0);
+                    p_player.set_comeback_time(100);
+                    continue;
+                }
             }
         }
-  
-        game_map.DrawMap(g_screen);
 
         p_player.HandleBullet(g_screen);
         p_player.SetMapXY(map_data.start_x_, map_data.start_y_);
@@ -185,6 +227,9 @@ int main(int argc, char* argv[])
         game_map.SetMap(map_data);
 
         //COLLISION
+        int frame_exp_width = exp_threat.get_frame_width();
+        int frame_exp_height = exp_threat.get_frame_height();
+
         std::vector<BulletObj*> bullet_arr = p_player.get_bullet_list();
         for (int r = 0; r < bullet_arr.size(); r++)
         {
@@ -206,6 +251,15 @@ int main(int argc, char* argv[])
                         bool isColide = SDLCommonFunc::CheckCollision(bulletRect, threatRect);
                         if (isColide)
                         {
+                            for (int ex = 0; ex < MAX_FRAMES; ex++)
+                            {
+                                int x_pos = p_bullet->GetRect().x - frame_exp_width * 0.5;
+                                int y_pos = p_bullet->GetRect().y - frame_exp_width * 0.5;
+
+                                exp_threat.set_frames(ex);
+                                exp_threat.SetRect(x_pos, y_pos);
+                                exp_threat.Display(g_screen);
+                            }
                             p_player.RemoveBulletHit(r);
                             obj_threat->Free();
                             threat_list.erase(threat_list.begin() + t);
@@ -216,6 +270,16 @@ int main(int argc, char* argv[])
         }
 
         SDL_RenderPresent(g_screen);
+        
+        if (num_die == 3)
+        {
+            if (MessageBox(NULL, L"GAME OVER", L"INFO", MB_OK | MB_ICONSTOP) == IDOK)
+            {
+                Close();
+                SDL_Quit();
+                return 0;
+            }
+        }
 
         int real_imp_time = fps_timer.get_ticks();
         int time_per_frame = 1000 / FRAME_PER_SECOND;

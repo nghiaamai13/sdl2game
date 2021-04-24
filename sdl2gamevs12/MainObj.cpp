@@ -7,7 +7,7 @@ MainObj::MainObj()
 	
 	x_val_ = 0;
 	y_val_ = 0;
-	x_pos_ = 10;
+	x_pos_ = 100;
 	y_pos_ = 200;
 	
 	width_frame_ = 0;
@@ -28,6 +28,7 @@ MainObj::MainObj()
 
 	come_back_time_ = 0;
     money_count = 0;
+	fall_count = 0;
 }
 
 MainObj::~MainObj()
@@ -45,6 +46,16 @@ bool MainObj::LoadImg(std::string path, SDL_Renderer* screen)
 	}
 
 	return ret;
+}
+
+SDL_Rect MainObj::GetRectFrame()
+{
+	SDL_Rect rect;
+	rect.x = rect_.x;
+	rect.y = rect_.y;
+	rect.w = width_frame_;
+	rect.h = height_frame_;
+	return rect;
 }
 
 void MainObj::Set_Clips()
@@ -311,7 +322,12 @@ bool MainObj :: contains(int tiles_value)
 
 void MainObj::IncreaseMoney()
 {
-    money_count ++;
+    money_count++;
+}
+
+void MainObj::IncreaseFallCount()
+{
+	fall_count++;
 }
 
 void MainObj::CheckToMap(Map& map_data)
@@ -432,6 +448,7 @@ void MainObj::CheckToMap(Map& map_data)
 	}
 	if (y_pos_ > map_data.max_y_)
 	{
+		IncreaseFallCount();
 		come_back_time_ = 60;
 	}
 }

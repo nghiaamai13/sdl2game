@@ -11,6 +11,8 @@
 #define THREAT_MAX_FALL_SPEED 10
 #define THREAT_SPEED 3
 
+#define THREAT_BULLET_DISTANCE 360
+
 class ThreatsObject : public BaseObject
 {
 public:
@@ -35,7 +37,8 @@ public:
 	void Display(SDL_Renderer* des);
 	int GetHeightFrame() const { return height_frame_; }
 	int GetWidthFrame() const { return width_frame_; }
-	
+	SDL_Rect GetRectFrame();
+
 	void InitThreat();
 	void DoThreats(Map& g_map_);
 	void CheckToMap(Map& g_map_);
@@ -51,7 +54,7 @@ public:
 	void set_bullet_list(const std::vector<BulletObj*>& tBlList) { t_bullet_list_ = tBlList; }
 	void InitBullet(BulletObj* t_bullet, SDL_Renderer* screen);
 	void MakeBullet(SDL_Renderer* screen, const int& t_x_border, const int& t_y_border);
-	
+	void RemoveBulletHit(const int& idx);
 private:
 
 	float x_pos_;
