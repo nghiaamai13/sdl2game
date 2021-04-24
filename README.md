@@ -29,3 +29,7 @@ project made from visual studio 2012
 - 18/04/2021 7th commit
    + threat_can_Shoot
    + toi uu threat
+
+- 24/04/2021 8th commit
+   + xonng va cham , co hieu ung vu no
+   + player co 3 mang . mat 1 khi fall hoac colide
