@@ -8,8 +8,8 @@
 
 #define GRAVITY_SPEED 0.9
 #define MAX_FALL_SPEED 12
-#define PLAYER_SPEED 6.5
-#define PLAYER_JUMP_VALUE 23
+#define PLAYER_SPEED 5.5
+#define PLAYER_JUMP_VALUE 17.5
 #define MAX_FRAME_CLIP 8
 #define MONEY_TILE 290
 
@@ -31,12 +31,12 @@ public:
 
     bool LoadImg(std :: string path, SDL_Renderer* screen);
     void Display(SDL_Renderer* des);
-    void HandleInputAction(SDL_Event events, SDL_Renderer* screen);
+    void HandleInputAction(SDL_Event events, SDL_Renderer* screen, Mix_Chunk* bullet_sound, Mix_Chunk* steps);
     void Set_Clips();
     SDL_Rect GetRectFrame();
 
-    void DoPlayer(Map& map_data);
-    void CheckToMap(Map& map_data);
+    void DoPlayer(Map& map_data, Mix_Chunk* fall_sound, Mix_Chunk* coin_sound);
+    void CheckToMap(Map& map_data, Mix_Chunk* fall_sound , Mix_Chunk* coin_sound);
     void SetMapXY(const int map_x, const int map_y) { map_x_ = map_x; map_y_ = map_y; }
     void CenterEntityOnMap(Map& map_data);
     void UpdatePlayerImg(SDL_Renderer* des);
@@ -54,6 +54,9 @@ public:
 
     void IncreaseMoney();
     void IncreaseFallCount();
+
+    int get_width_frame() const { return width_frame_; }
+    int get_height_frame() const { return height_frame_; }
 
     int get_fall_count() const {return fall_count; }
     void set_comeback_time(const int& cb_time) { come_back_time_ = cb_time;}

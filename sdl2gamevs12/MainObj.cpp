@@ -101,7 +101,8 @@ void MainObj::Display(SDL_Renderer* des)
 	}
 }
 
-void MainObj::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
+void MainObj::HandleInputAction(SDL_Event events, SDL_Renderer* screen, 
+								Mix_Chunk* bullet_sound, Mix_Chunk* steps)
 {
 
 	if (events.type == SDL_KEYDOWN)
@@ -114,6 +115,10 @@ void MainObj::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
 			input_type_.right_ = 1;
 			input_type_.left_ = 0;
 			UpdatePlayerImg(screen);
+			if (on_ground_ == true)
+			{
+				Mix_PlayChannel(-1, steps, 0);
+			}
 		}
 		break;
 		case SDLK_LEFT:
@@ -122,7 +127,10 @@ void MainObj::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
 			input_type_.left_ = 1;
 			input_type_.right_ = 0;
 			UpdatePlayerImg(screen);
-
+			if (on_ground_ == true)
+			{
+				Mix_PlayChannel(-1, steps, 0);
+			}
 		}
 		break;
 		}
@@ -146,7 +154,7 @@ void MainObj::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
 
 	if (events.type == SDL_MOUSEBUTTONDOWN)
 	{
-		if(events.button.button == SDL_BUTTON_RIGHT)
+		if (events.button.button == SDL_BUTTON_RIGHT)
 		{
 			input_type_.jump_ = 1;
 		}
@@ -170,11 +178,13 @@ void MainObj::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
             {
                 p_bullet->set_bullet_dir(BulletObj::DIR_LEFT);
                 p_bullet->SetRect(this->rect_.x , rect_.y + height_frame_ * 0.25);
+				Mix_PlayChannel(-1, bullet_sound, 0);
             }
             else if(status_== MOVE_RIGHT)
             {            
                 p_bullet->set_bullet_dir(BulletObj::DIR_RIGHT);
                 p_bullet->SetRect(this->rect_.x + width_frame_ - 20 , rect_.y + height_frame_ * 0.25);
+				Mix_PlayChannel(-1, bullet_sound, 0);
 
             }
             p_bullet->set_x_val(20);
@@ -228,7 +238,7 @@ void MainObj::RemoveBulletHit(const int& idx)
 	}
 }
 
-void MainObj::DoPlayer(Map& map_data)
+void MainObj::DoPlayer(Map& map_data ,Mix_Chunk* fall_sound, Mix_Chunk* coin_sound )
 {
 	if (come_back_time_ == 0) {
 		x_val_ = 0;
@@ -256,7 +266,7 @@ void MainObj::DoPlayer(Map& map_data)
 			}
 			input_type_.jump_ = 0;
 		}
-		CheckToMap(map_data);
+		CheckToMap(map_data, fall_sound , coin_sound);
 		CenterEntityOnMap(map_data);
 	}
 	if (come_back_time_ > 0)
@@ -312,7 +322,8 @@ bool MainObj :: contains(int tiles_value)
 		&& tiles_value != 1 && tiles_value != 2 && tiles_value != 3
 		&& tiles_value != 4 && tiles_value != 30 && tiles_value != 33
 		&& tiles_value != 59 && tiles_value != 62 && tiles_value != 151
-		&& tiles_value != 204 && tiles_value != 233
+		&& tiles_value != 204 && tiles_value != 233 && tiles_value != 127 && tiles_value != 128
+		&& tiles_value != 129 && tiles_value != 130 && tiles_value != 239
 		&& tiles_value != 220 && tiles_value != 249  && tiles_value != 0)
 	{
 		return true;
@@ -330,7 +341,7 @@ void MainObj::IncreaseFallCount()
 	fall_count++;
 }
 
-void MainObj::CheckToMap(Map& map_data)
+void MainObj::CheckToMap(Map& map_data , Mix_Chunk* fall_sound , Mix_Chunk* coin_sound)
 {
 	int x1 = 0;
 	int x2 = 0;
@@ -356,6 +367,7 @@ void MainObj::CheckToMap(Map& map_data)
                  map_data.tile[y1][x2] = 0;
                  map_data.tile[y2][x2] = 0;
                  IncreaseMoney();
+				 Mix_PlayChannel(-1, coin_sound, 0);
             }
 
             else 
@@ -375,6 +387,7 @@ void MainObj::CheckToMap(Map& map_data)
                  map_data.tile[y1][x1] = 0;
                  map_data.tile[y2][x1] = 0;
                  IncreaseMoney();
+				 Mix_PlayChannel(-1, coin_sound, 0);
             }
             else 
             {
@@ -405,6 +418,7 @@ void MainObj::CheckToMap(Map& map_data)
                  map_data.tile[y2][x2] = 0;
                  map_data.tile[y2][x2] = 0;
                  IncreaseMoney();
+				 Mix_PlayChannel(-1, coin_sound, 0);
             }
             else 
             {
@@ -424,6 +438,7 @@ void MainObj::CheckToMap(Map& map_data)
                  map_data.tile[y1][x1] = 0;
                  map_data.tile[y1][x2] = 0;
                  IncreaseMoney();
+				 Mix_PlayChannel(-1, coin_sound, 0);
             }
             else
             {
@@ -450,6 +465,7 @@ void MainObj::CheckToMap(Map& map_data)
 	{
 		IncreaseFallCount();
 		come_back_time_ = 60;
+		Mix_PlayChannel(-1, fall_sound, 0);
 	}
 }
 

@@ -44,6 +44,25 @@ bool Init()
                 success = false;
         }
     }
+    
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+    {
+        success = false;
+    }
+
+    g_music = Mix_LoadMUS("sound//background.mp3");
+    g_bullet_sound[1] = Mix_LoadWAV("sound//Fire1.wav");
+    g_bullet_sound[2] = Mix_LoadWAV("sound//Laser.wav");
+    g_playerdie_sound = Mix_LoadWAV("sound//ha.wav");
+    g_explosion_sound = Mix_LoadWAV("sound//exp.wav");
+    g_coin_sound = Mix_LoadWAV("sound//coin.wav");
+    //g_steps_sound = Mix_LoadWAV("sound//steps.wav");
+
+    if (g_music == NULL || g_bullet_sound[1] == NULL || g_bullet_sound[2] == NULL
+        || g_playerdie_sound == NULL || g_explosion_sound == NULL || g_coin_sound == NULL)
+    {
+        success = false;
+    }
 
     return success;
 }
@@ -130,6 +149,8 @@ int main(int argc, char* argv[])
     if (LoadBackground() == false)
         return -1;
 
+    Mix_PlayMusic(g_music, -1);
+
 	GameMap game_map;
 	bool bRet = game_map.LoadMap("map/map11.dat");
     if (bRet == false)
@@ -142,9 +163,15 @@ int main(int argc, char* argv[])
     p_player.Set_Clips();
 
     ExplosionFrames exp_threat;
+    ExplosionFrames exp_main;
+
     bool threxp_success = exp_threat.LoadImg("img//exp1.png", g_screen);
     if (!threxp_success) return -1;
     exp_threat.set_clips();
+
+    bool mainexp_success = exp_main.LoadImg("img//exp1.png", g_screen);
+    if (!mainexp_success) return -1;
+    exp_main.set_clips();
 
     int num_fall = 0;
     int num_bullet_hit = 0;
@@ -163,10 +190,11 @@ int main(int argc, char* argv[])
             {
                 is_quit = true;
             }
-            p_player.HandleInputAction(g_event, g_screen);
+            p_player.HandleInputAction(g_event, g_screen, g_bullet_sound[1], g_steps_sound);
 
         }
- 
+
+        
         SDL_RenderClear(g_screen);
         g_background.Render(g_screen, NULL);
 
@@ -211,9 +239,21 @@ int main(int argc, char* argv[])
                 //PLAYER DIED
                 if ( isCol2 || isCol1)
                 {
+                    int m_frame_exp_width = exp_main.get_frame_width();
+                    int m_frame_exp_height = exp_main.get_frame_height();
+                    for (int ex = 0; ex < MAX_FRAMES; ex++)
+                    {
+                        int x_pos = p_player.GetRectFrame().x + p_player.GetRectFrame().w * 0.5 - m_frame_exp_width * 0.5;
+                        int y_pos = p_player.GetRectFrame().y + p_player.GetRectFrame().h * 0.5 - m_frame_exp_height * 0.5;
+
+                        exp_main.set_frames(ex);
+                        exp_main.SetRect(x_pos, y_pos);
+                        exp_main.Display(g_screen);
+                    }
                     num_bullet_hit++; 
+                    Mix_PlayChannel(-1, g_playerdie_sound, 0);
                     p_player.SetRect(0, 0);
-                    p_player.set_comeback_time(100);
+                    p_player.set_comeback_time(70);
                     continue;
                 }
             }
@@ -221,12 +261,12 @@ int main(int argc, char* argv[])
 
         p_player.HandleBullet(g_screen);
         p_player.SetMapXY(map_data.start_x_, map_data.start_y_);
-        p_player.DoPlayer(map_data);
+        p_player.DoPlayer(map_data, g_playerdie_sound , g_coin_sound);
         p_player.Display(g_screen);
 
         game_map.SetMap(map_data);
 
-        //COLLISION
+        //COLLISION P_BULLET -> THREAT
         int frame_exp_width = exp_threat.get_frame_width();
         int frame_exp_height = exp_threat.get_frame_height();
 
@@ -261,6 +301,7 @@ int main(int argc, char* argv[])
                                 exp_threat.Display(g_screen);
                             }
                             p_player.RemoveBulletHit(r);
+                            Mix_PlayChannel(-1, g_explosion_sound, 0);
                             obj_threat->Free();
                             threat_list.erase(threat_list.begin() + t);
                         }

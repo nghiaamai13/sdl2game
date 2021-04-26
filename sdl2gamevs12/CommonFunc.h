@@ -14,6 +14,14 @@ static SDL_Window* g_window = NULL;
 static SDL_Renderer* g_screen = NULL;
 static SDL_Event g_event;
 
+//Audio
+static Mix_Music* g_music = NULL;
+static Mix_Chunk* g_bullet_sound[2];
+static Mix_Chunk* g_explosion_sound = NULL;
+static Mix_Chunk* g_playerdie_sound = NULL;
+static Mix_Chunk* g_coin_sound = NULL;
+static Mix_Chunk* g_steps_sound = NULL;
+
 //Screen
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 640;
