@@ -7,6 +7,7 @@
 #include"ImplementTimer.h"
 #include"ThreatObj.h"
 #include"ExplosionFrames.h"
+#include"Utilities.h"
 
 BaseObject g_background;
 
@@ -173,8 +174,13 @@ int main(int argc, char* argv[])
     if (!mainexp_success) return -1;
     exp_main.set_clips();
 
+    int num_life = 3;
     int num_fall = 0;
     int num_bullet_hit = 0;
+    int num_die = 0;
+
+    IMG_DISPLAY player_life;
+    player_life.Init(g_screen);
 
     std::vector<ThreatsObject*> threat_list = MakeThreatList();
    
@@ -201,8 +207,21 @@ int main(int argc, char* argv[])
         Map map_data = game_map.getMap();
         game_map.DrawMap(g_screen);
         
+        num_life = 3 - num_die;
+        if (num_life > 3)
+        {
+            num_life--;
+        }
+
+        player_life.setNum(num_life);
+
+        player_life.Show(g_screen);
+
         num_fall = p_player.get_fall_count();
-        int num_die = num_fall + num_bullet_hit;
+        num_die = num_fall + num_bullet_hit ;
+
+
+        
         for (int i = 0; i < threat_list.size(); i++)
         {
             ThreatsObject* p_threat = threat_list.at(i);
@@ -314,6 +333,14 @@ int main(int argc, char* argv[])
         
         if (num_die == 3)
         {
+            Mix_PauseMusic();
+            g_background.Free();
+            SDL_RenderClear(g_screen);
+            g_background.LoadImg("img//overtest.png", g_screen);
+            g_background.Render(g_screen, NULL);
+            SDL_RenderPresent(g_screen);
+            SDL_Delay(2000);
+
             if (MessageBox(NULL, L"GAME OVER", L"INFO", MB_OK | MB_ICONSTOP) == IDOK)
             {
                 Close();

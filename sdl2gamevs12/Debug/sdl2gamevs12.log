@@ -1,16 +1,17 @@
 ﻿  main.cpp
 g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\mainobj.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(108): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
-g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(111): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\utilities.h(14): warning C4042: 'NUM' : has bad storage class
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(109): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
 g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(112): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(131): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
-g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(206): warning C4018: '<' : signed/unsigned mismatch
-g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(222): warning C4018: '<' : signed/unsigned mismatch
-g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(246): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(247): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(274): warning C4018: '<' : signed/unsigned mismatch
-g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(279): warning C4018: '<' : signed/unsigned mismatch
-g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(296): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(297): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(334): warning C4018: '<' : signed/unsigned mismatch
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(113): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(132): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(225): warning C4018: '<' : signed/unsigned mismatch
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(241): warning C4018: '<' : signed/unsigned mismatch
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(265): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(266): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(293): warning C4018: '<' : signed/unsigned mismatch
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(298): warning C4018: '<' : signed/unsigned mismatch
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(315): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(316): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+g:\c+\sdl2vs12\sdl2gamevs12\sdl2gamevs12\main.cpp(361): warning C4018: '<' : signed/unsigned mismatch
   sdl2gamevs12.vcxproj -> G:\C+\sdl2vs12\sdl2gamevs12\Debug\sdl2gamevs12.exe

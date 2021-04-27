@@ -12,6 +12,7 @@
 #define PLAYER_JUMP_VALUE 17.5
 #define MAX_FRAME_CLIP 8
 #define MONEY_TILE 290
+#define LIFE_TILE 292
 
 
 class MainObj : public BaseObject
@@ -53,6 +54,7 @@ public:
     void RemoveBulletHit(const int& idx);
 
     void IncreaseMoney();
+    void IncreaseLife();
     void IncreaseFallCount();
 
     int get_width_frame() const { return width_frame_; }
@@ -86,7 +88,6 @@ private:
     int come_back_time_;
 
     int money_count;
-
     int fall_count;
 };
 

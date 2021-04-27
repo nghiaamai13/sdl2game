@@ -319,7 +319,7 @@ bool MainObj :: contains(int tiles_value)
 		&& tiles_value != 37 && tiles_value != 124 && (tiles_value < 35 || tiles_value > 38)
 		&& tiles_value != 146 && tiles_value != 175 && tiles_value != 60
 		&& tiles_value != 162 && tiles_value != 191 && tiles_value != 59
-		&& tiles_value != 1 && tiles_value != 2 && tiles_value != 3
+		&& tiles_value != 1 && tiles_value != 2 && tiles_value != 3 && tiles_value != 243
 		&& tiles_value != 4 && tiles_value != 30 && tiles_value != 33
 		&& tiles_value != 59 && tiles_value != 62 && tiles_value != 151
 		&& tiles_value != 204 && tiles_value != 233 && tiles_value != 127 && tiles_value != 128
@@ -336,10 +336,19 @@ void MainObj::IncreaseMoney()
     money_count++;
 }
 
+void MainObj::IncreaseLife()
+{
+	if (fall_count > 0)
+	{
+		fall_count--;
+	}
+}
+
 void MainObj::IncreaseFallCount()
 {
 	fall_count++;
 }
+
 
 void MainObj::CheckToMap(Map& map_data , Mix_Chunk* fall_sound , Mix_Chunk* coin_sound)
 {
@@ -370,6 +379,14 @@ void MainObj::CheckToMap(Map& map_data , Mix_Chunk* fall_sound , Mix_Chunk* coin
 				 Mix_PlayChannel(-1, coin_sound, 0);
             }
 
+			else if (map_data.tile[y1][x2] == LIFE_TILE || map_data.tile[y2][x2] == LIFE_TILE)
+			{
+				map_data.tile[y1][x2] = 0;
+				map_data.tile[y2][x2] = 0;
+				IncreaseLife();
+				Mix_PlayChannel(-1, coin_sound, 0);
+			}
+
             else 
             {
 			    if (contains(map_data.tile[y1][x2]) || contains(map_data.tile[y2][x2]))
@@ -389,6 +406,13 @@ void MainObj::CheckToMap(Map& map_data , Mix_Chunk* fall_sound , Mix_Chunk* coin
                  IncreaseMoney();
 				 Mix_PlayChannel(-1, coin_sound, 0);
             }
+			else if (map_data.tile[y1][x1] == LIFE_TILE || map_data.tile[y2][x1] == LIFE_TILE)
+			{
+				map_data.tile[y1][x1] = 0;
+				map_data.tile[y2][x1] = 0;
+				IncreaseLife();
+				Mix_PlayChannel(-1, coin_sound, 0);
+			}
             else 
             {
 			    if (contains(map_data.tile[y1][x1]) || contains(map_data.tile[y2][x1]))
@@ -420,6 +444,14 @@ void MainObj::CheckToMap(Map& map_data , Mix_Chunk* fall_sound , Mix_Chunk* coin
                  IncreaseMoney();
 				 Mix_PlayChannel(-1, coin_sound, 0);
             }
+			else if (map_data.tile[y2][x1] == LIFE_TILE || map_data.tile[y2][x2] == LIFE_TILE)
+			{
+				map_data.tile[y2][x2] = 0;
+				map_data.tile[y2][x2] = 0;
+				IncreaseLife();
+				Mix_PlayChannel(-1, coin_sound, 0);
+			}
+
             else 
             {
 			    if (contains(map_data.tile[y2][x1]) || contains(map_data.tile[y2][x2]))
@@ -440,6 +472,15 @@ void MainObj::CheckToMap(Map& map_data , Mix_Chunk* fall_sound , Mix_Chunk* coin
                  IncreaseMoney();
 				 Mix_PlayChannel(-1, coin_sound, 0);
             }
+			
+			else if (map_data.tile[y1][x1] == LIFE_TILE || map_data.tile[y1][x2] == LIFE_TILE)
+			{
+				map_data.tile[y1][x1] = 0;
+				map_data.tile[y1][x2] = 0;
+				IncreaseLife();
+				Mix_PlayChannel(-1, coin_sound, 0);
+			}
+
             else
             {
 			    if (contains(map_data.tile[y1][x1]) || contains(map_data.tile[y1][x2]))
