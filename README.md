@@ -33,3 +33,7 @@ project made from visual studio 2012
 - 24/04/2021 8th commit
    + xonng va cham , co hieu ung vu no
    + player co 3 mang . mat 1 khi fall hoac colide
+
+- 26/04/2021 9th commit
+   + fix va cham , fix vu no 
+   + xong game sound , tiep tuc hoan thien map
