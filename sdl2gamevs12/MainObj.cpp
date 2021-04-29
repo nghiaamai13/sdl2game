@@ -28,7 +28,7 @@ MainObj::MainObj()
 
 	come_back_time_ = 0;
     money_count = 0;
-	fall_count = 0;
+	fall_count = 1;
 }
 
 MainObj::~MainObj()
@@ -102,7 +102,7 @@ void MainObj::Display(SDL_Renderer* des)
 }
 
 void MainObj::HandleInputAction(SDL_Event events, SDL_Renderer* screen, 
-								Mix_Chunk* bullet_sound, Mix_Chunk* steps)
+								Mix_Chunk* bullet_sound)
 {
 
 	if (events.type == SDL_KEYDOWN)
@@ -115,10 +115,6 @@ void MainObj::HandleInputAction(SDL_Event events, SDL_Renderer* screen,
 			input_type_.right_ = 1;
 			input_type_.left_ = 0;
 			UpdatePlayerImg(screen);
-			if (on_ground_ == true)
-			{
-				Mix_PlayChannel(-1, steps, 0);
-			}
 		}
 		break;
 		case SDLK_LEFT:
@@ -127,10 +123,6 @@ void MainObj::HandleInputAction(SDL_Event events, SDL_Renderer* screen,
 			input_type_.left_ = 1;
 			input_type_.right_ = 0;
 			UpdatePlayerImg(screen);
-			if (on_ground_ == true)
-			{
-				Mix_PlayChannel(-1, steps, 0);
-			}
 		}
 		break;
 		}
@@ -338,9 +330,13 @@ void MainObj::IncreaseMoney()
 
 void MainObj::IncreaseLife()
 {
-	if (fall_count > 0)
+	if (fall_count >= 1)
 	{
 		fall_count--;
+		if (fall_count < 1)
+		{
+			fall_count = 1;
+		}
 	}
 }
 

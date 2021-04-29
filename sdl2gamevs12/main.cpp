@@ -10,6 +10,7 @@
 #include"Utilities.h"
 
 BaseObject g_background;
+TTF_Font* time_font;
 
 bool Init()
 {
@@ -20,7 +21,7 @@ bool Init()
     
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 
-    g_window = SDL_CreateWindow("Game SDL2.0 Demo",
+    g_window = SDL_CreateWindow("Jungle Survival",
                                 SDL_WINDOWPOS_UNDEFINED,
                                 SDL_WINDOWPOS_UNDEFINED,
                                 SCREEN_WIDTH,
@@ -44,6 +45,16 @@ bool Init()
             if (!(IMG_Init(imgFlags) && imgFlags))
                 success = false;
         }
+
+        if (TTF_Init() == -1)
+        {
+            success = false;
+        }
+        time_font = TTF_OpenFont("font//dlxfont_.ttf", 15);
+        if (time_font == NULL)
+        {
+            success = false;
+        }
     }
     
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
@@ -57,7 +68,6 @@ bool Init()
     g_playerdie_sound = Mix_LoadWAV("sound//ha.wav");
     g_explosion_sound = Mix_LoadWAV("sound//exp.wav");
     g_coin_sound = Mix_LoadWAV("sound//coin.wav");
-    //g_steps_sound = Mix_LoadWAV("sound//steps.wav");
 
     if (g_music == NULL || g_bullet_sound[1] == NULL || g_bullet_sound[2] == NULL
         || g_playerdie_sound == NULL || g_explosion_sound == NULL || g_coin_sound == NULL)
@@ -97,8 +107,8 @@ std::vector<ThreatsObject*> MakeThreatList()
     std::vector<ThreatsObject*> threat_list;
     
     //MOVING THREAT
-    ThreatsObject* dynamic_threat = new ThreatsObject[40];
-    for (int i = 0; i < 20; i++) 
+    ThreatsObject* dynamic_threat = new ThreatsObject[30];
+    for (int i = 0; i < 30; i++) 
     {
         ThreatsObject* p_threat = (dynamic_threat + i);
         if (p_threat != NULL)
@@ -147,11 +157,41 @@ int main(int argc, char* argv[])
 {   
     if (Init() == false)
         return -1;
-    if (LoadBackground() == false)
-        return -1;
 
     Mix_PlayMusic(g_music, -1);
 
+    g_background.LoadImg("img//bg.png", g_screen);
+    g_background.Render(g_screen, NULL);
+    SDL_RenderPresent(g_screen);
+
+    if (LoadBackground() == false)
+        return -1;
+
+    bool is_quit = false;
+    int start_time = 0;
+    while (SDL_WaitEvent(&g_event))
+    {
+        if (g_event.type == SDL_QUIT)
+        {
+            is_quit = true;
+            Close();
+        }
+        else if (g_event.type == SDL_KEYDOWN)
+        {
+            if (g_event.key.keysym.sym)
+            {
+                is_quit = false;
+                start_time = SDL_GetTicks() / 1000;
+                break;
+            }
+        }
+        else if (g_event.type == SDL_MOUSEBUTTONDOWN)
+        {
+            is_quit = false;
+            start_time = SDL_GetTicks() / 1000;
+            break;
+        }
+    }
 	GameMap game_map;
 	bool bRet = game_map.LoadMap("map/map11.dat");
     if (bRet == false)
@@ -177,16 +217,23 @@ int main(int argc, char* argv[])
     int num_life = 3;
     int num_fall = 0;
     int num_bullet_hit = 0;
-    int num_die = 0;
 
     IMG_DISPLAY player_life;
     player_life.Init(g_screen);
+
+    TextObj time_game;
+    time_game.SetColor(255, 0, 0);
+    int mark_hit = 0;
+    TextObj mark_hits;
+    mark_hits.SetColor(255, 0, 0);
+    TextObj txt_coins;
+    int coin_hit = 0;
+    txt_coins.SetColor(255, 0, 0);
 
     std::vector<ThreatsObject*> threat_list = MakeThreatList();
    
     ImpTimer fps_timer;
     
-    bool is_quit = false;
     while(!is_quit)
     {
         fps_timer.start();
@@ -196,32 +243,17 @@ int main(int argc, char* argv[])
             {
                 is_quit = true;
             }
-            p_player.HandleInputAction(g_event, g_screen, g_bullet_sound[1], g_steps_sound);
-
+            p_player.HandleInputAction(g_event, g_screen, g_bullet_sound[1]);
         }
 
-        
         SDL_RenderClear(g_screen);
         g_background.Render(g_screen, NULL);
 
         Map map_data = game_map.getMap();
         game_map.DrawMap(g_screen);
-        
-        num_life = 3 - num_die;
-        if (num_life > 3)
-        {
-            num_life--;
-        }
-
-        player_life.setNum(num_life);
 
         player_life.Show(g_screen);
-
-        num_fall = p_player.get_fall_count();
-        num_die = num_fall + num_bullet_hit ;
-
-
-        
+  
         for (int i = 0; i < threat_list.size(); i++)
         {
             ThreatsObject* p_threat = threat_list.at(i);
@@ -285,6 +317,7 @@ int main(int argc, char* argv[])
 
         game_map.SetMap(map_data);
 
+        
         //COLLISION P_BULLET -> THREAT
         int frame_exp_width = exp_threat.get_frame_width();
         int frame_exp_height = exp_threat.get_frame_height();
@@ -319,19 +352,44 @@ int main(int argc, char* argv[])
                                 exp_threat.SetRect(x_pos, y_pos);
                                 exp_threat.Display(g_screen);
                             }
+                            mark_hit++;
                             p_player.RemoveBulletHit(r);
                             Mix_PlayChannel(-1, g_explosion_sound, 0);
                             obj_threat->Free();
                             threat_list.erase(threat_list.begin() + t);
                         }
-                    }
+                    }  
                 }
             }
         }
 
+        mark_hits.SetText(std::to_string(mark_hit));
+        mark_hits.LoadToRender(time_font, g_screen);
+        mark_hits.RenderText(g_screen, SCREEN_WIDTH - 410, 10);
+
+        coin_hit = p_player.get_coin_count();
+        txt_coins.SetText(std::to_string(coin_hit));
+        txt_coins.LoadToRender(time_font, g_screen);
+        txt_coins.RenderText(g_screen, SCREEN_WIDTH/2 - 100, 10);
+
+        std::string str_time = "Time: ";
+        Uint32 time_ = SDL_GetTicks() / 1000 - start_time;
+        std::string str_time_val = std::to_string(time_);
+        str_time += str_time_val;
+        time_game.SetText(str_time);
+        time_game.LoadToRender(time_font, g_screen);
+        time_game.RenderText(g_screen, SCREEN_WIDTH - 200, 10);
+
+
+        num_fall = p_player.get_fall_count();
+        num_life = 4 - num_fall - num_bullet_hit;
+
+        player_life.setNum(num_life);
+
+
         SDL_RenderPresent(g_screen);
-        
-        if (num_die == 3)
+
+        if (num_life == 0)
         {
             Mix_PauseMusic();
             g_background.Free();
@@ -348,6 +406,7 @@ int main(int argc, char* argv[])
                 return 0;
             }
         }
+
 
         int real_imp_time = fps_timer.get_ticks();
         int time_per_frame = 1000 / FRAME_PER_SECOND;
@@ -368,6 +427,7 @@ int main(int argc, char* argv[])
         }
     }
     threat_list.clear();
+
     Close();
 
     return 0;

@@ -25,7 +25,29 @@ private:
 
 };
 
+class TextObj
+{
+public:
+	TextObj();
+	~TextObj();
 
+	bool LoadToRender(TTF_Font* font, SDL_Renderer* screen);
+	void Free();
+
+	void SetColor(Uint8 r, Uint8 g, Uint8 b);
+
+	void RenderText(SDL_Renderer* screen, int xp, int yp, SDL_Rect* clip = NULL,
+		double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
+	void SetText(const std::string text) { str_ = text; }
+
+private:
+	std::string str_;
+	SDL_Color text_color;
+	SDL_Texture* texture_;
+	int width;
+	int height;
+
+};
 
 
 #endif // !1

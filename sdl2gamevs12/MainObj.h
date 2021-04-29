@@ -32,7 +32,7 @@ public:
 
     bool LoadImg(std :: string path, SDL_Renderer* screen);
     void Display(SDL_Renderer* des);
-    void HandleInputAction(SDL_Event events, SDL_Renderer* screen, Mix_Chunk* bullet_sound, Mix_Chunk* steps);
+    void HandleInputAction(SDL_Event events, SDL_Renderer* screen, Mix_Chunk* bullet_sound);
     void Set_Clips();
     SDL_Rect GetRectFrame();
 
@@ -61,6 +61,7 @@ public:
     int get_height_frame() const { return height_frame_; }
 
     int get_fall_count() const {return fall_count; }
+    int get_coin_count() const { return money_count; }
     void set_comeback_time(const int& cb_time) { come_back_time_ = cb_time;}
 
 private:
