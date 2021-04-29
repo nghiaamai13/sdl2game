@@ -37,3 +37,7 @@ project made from visual studio 2012
 - 26/04/2021 9th commit
    + fix va cham , fix vu no 
    + xong game sound , tiep tuc hoan thien map
+   
+- 29/04/2021 commit
+   + hoan thien game (load text, tao menu don gian , chi so diem ,v..v.)
+
