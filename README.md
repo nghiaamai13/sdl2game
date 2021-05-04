@@ -1,5 +1,15 @@
 #sdl2game
 
+
+++ mô tả game theo yêu càu thày:
+- game dạng sống sót và giét quái vật để về đích.
+- vào game dạng press any key (tạm). sau đó dùng phím mũi tên trái phải , nhảy bằng chuột phải
+,bắn bằng chuột trái. (menu end game tạm thời chỉ là 1 backgound , chưa có replay, score)
+- game có tham khảo từ 1 số nguồn ( lazyfoo và link youtube ở commit 1 , internet.. )nhưng do code khá dài nê e k tiện nói vè nhứng thứ tự làm hay tham khảo (ít nhất được 50% là tự tìm hiểu và code)
+- link demo : https://drive.google.com/file/d/1JVq5Y3zvgIV06sncjuaODJ3zt12bj--E/view?usp=sharing 
+(chỉnh lên 1080p, do chỉ demo nên e đặt nhũng tính nâng lên trước cho nhanh, map rộng hơn nhiều) 
+
+
 project made from visual studio 2012
 
 - 09/03/2021 1st commit : 
