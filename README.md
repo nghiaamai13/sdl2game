@@ -51,3 +51,5 @@ project made from visual studio 2012
 - 29/04/2021 commit
    + hoan thien game (load text, tao menu don gian , chi so diem ,v..v.)
 
+-5/5/2021 demo.
+
