@@ -33,19 +33,7 @@ void IMG_DISPLAY::Show(SDL_Renderer* screen)
 	}
 }
 
-/*void IMG_DISPLAY::Increase()
-{
-	num++;
-	int last_pos = pos.back();
-	last_pos += 40;
-	pos.push_back(last_pos);
-}
 
-void IMG_DISPLAY::Decrease()
-{
-	num--;
-	pos.pop_back();
-}*/
 TextObj::TextObj()
 {
 	text_color.r = 255;

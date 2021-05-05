@@ -5,6 +5,8 @@
 #include"BaseObject.h"
 #include"CommonFunc.h"
 
+#define PLAYERBULLET_SPEED 20
+
 class BulletObj : public BaseObject
 {
 public:

@@ -296,7 +296,7 @@ void ThreatsObject::InitBullet(BulletObj* t_bullet, SDL_Renderer* screen)
 		t_bullet->set_is_moving(true);
 		t_bullet->set_bullet_dir(BulletObj::DIR_LEFT);
 		t_bullet->SetRect(x_pos_ + 25, y_pos_ + 20);
-		t_bullet->set_x_val(15);
+		t_bullet->set_x_val(20);
 		t_bullet_list_.push_back(t_bullet);
 	}
 }

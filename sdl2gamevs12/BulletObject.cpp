@@ -23,10 +23,10 @@ void BulletObj :: HandleMove(const int &x_border , const int &y_border)
             is_moving = false;
         }
     }
-    else if(bullet_dir == DIR_LEFT)
+    else if (bullet_dir == DIR_LEFT)
     {
         rect_.x -= x_val_;
-        if(rect_.x < 0)
+        if (rect_.x < 0)
         {
             is_moving = false;
         }

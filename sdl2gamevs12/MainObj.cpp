@@ -19,7 +19,6 @@ MainObj::MainObj()
 	input_type_.right_ = 0;
 	input_type_.jump_ = 0;
 	input_type_.down_ = 0;
-	//input_type_.atk_ = 0;
 
 	on_ground_ = false;
 	
@@ -29,6 +28,7 @@ MainObj::MainObj()
 	come_back_time_ = 0;
     money_count = 0;
 	fall_count = 1;
+	flags_count = 0;
 }
 
 MainObj::~MainObj()
@@ -75,7 +75,7 @@ void MainObj::Set_Clips()
 
 void MainObj::Display(SDL_Renderer* des)
 {
-	if(input_type_.left_ == 1 || input_type_.right_ == 1)// || input_type_.atk_ == 1)
+	if(input_type_.left_ == 1 || input_type_.right_ == 1)
 	{
 		frame_++;
 	}
@@ -152,16 +152,6 @@ void MainObj::HandleInputAction(SDL_Event events, SDL_Renderer* screen,
 		}
 		else if (events.button.button == SDL_BUTTON_LEFT) 
 		{
-			//input_type_.atk_ = 1;
-			/*if (input_type_.left_ == 1)
-			{
-				LoadImg("img//atk_left.png", screen);
-			}
-			else if (input_type_.right_ == 1)
-			{
-				LoadImg("img//atk_right.png", screen);
-			}*/
-
             BulletObj* p_bullet = new BulletObj();
 
             p_bullet->LoadImg("img//sphere_bullet.png",screen);
@@ -179,7 +169,7 @@ void MainObj::HandleInputAction(SDL_Event events, SDL_Renderer* screen,
 				Mix_PlayChannel(-1, bullet_sound, 0);
 
             }
-            p_bullet->set_x_val(20);
+            p_bullet->set_x_val(PLAYERBULLET_SPEED);
             p_bullet->set_is_moving(true);
 
             p_bullet_list_.push_back(p_bullet);
@@ -197,7 +187,7 @@ void MainObj::HandleBullet(SDL_Renderer* des)
         {
             if(p_bullet->get_is_moving() == true)
             {
-                p_bullet->HandleMove(1280 ,640);
+                p_bullet->HandleMove(rect_.x + 640 ,0);
                 p_bullet->Render(des);
             }
             else 
@@ -345,6 +335,11 @@ void MainObj::IncreaseFallCount()
 	fall_count++;
 }
 
+void MainObj::IncreaseFlags()
+{
+	flags_count++;
+}
+
 
 void MainObj::CheckToMap(Map& map_data , Mix_Chunk* fall_sound , Mix_Chunk* coin_sound)
 {
@@ -382,6 +377,13 @@ void MainObj::CheckToMap(Map& map_data , Mix_Chunk* fall_sound , Mix_Chunk* coin
 				IncreaseLife();
 				Mix_PlayChannel(-1, coin_sound, 0);
 			}
+			else if (map_data.tile[y1][x2] == FLAGS_TILE || map_data.tile[y2][x2] == FLAGS_TILE)
+			{
+				map_data.tile[y1][x2] = 0;
+				map_data.tile[y2][x2] = 0;
+				IncreaseFlags();
+				Mix_PlayChannel(-1, coin_sound, 0);
+			}
 
             else 
             {
@@ -407,6 +409,13 @@ void MainObj::CheckToMap(Map& map_data , Mix_Chunk* fall_sound , Mix_Chunk* coin
 				map_data.tile[y1][x1] = 0;
 				map_data.tile[y2][x1] = 0;
 				IncreaseLife();
+				Mix_PlayChannel(-1, coin_sound, 0);
+			}
+			else if (map_data.tile[y1][x1] == FLAGS_TILE || map_data.tile[y2][x1] == FLAGS_TILE)
+			{
+				map_data.tile[y1][x1] = 0;
+				map_data.tile[y2][x1] = 0;
+				IncreaseFlags();
 				Mix_PlayChannel(-1, coin_sound, 0);
 			}
             else 
@@ -448,6 +457,14 @@ void MainObj::CheckToMap(Map& map_data , Mix_Chunk* fall_sound , Mix_Chunk* coin
 				Mix_PlayChannel(-1, coin_sound, 0);
 			}
 
+			else if (map_data.tile[y2][x1] == FLAGS_TILE || map_data.tile[y2][x2] == FLAGS_TILE)
+			{
+				map_data.tile[y2][x2] = 0;
+				map_data.tile[y2][x2] = 0;
+				IncreaseFlags();
+				Mix_PlayChannel(-1, coin_sound, 0);
+			}
+
             else 
             {
 			    if (contains(map_data.tile[y2][x1]) || contains(map_data.tile[y2][x2]))
@@ -474,6 +491,14 @@ void MainObj::CheckToMap(Map& map_data , Mix_Chunk* fall_sound , Mix_Chunk* coin
 				map_data.tile[y1][x1] = 0;
 				map_data.tile[y1][x2] = 0;
 				IncreaseLife();
+				Mix_PlayChannel(-1, coin_sound, 0);
+			}
+
+			else if (map_data.tile[y1][x1] == FLAGS_TILE || map_data.tile[y1][x2] == FLAGS_TILE)
+			{
+				map_data.tile[y1][x1] = 0;
+				map_data.tile[y1][x2] = 0;
+				IncreaseFlags();
 				Mix_PlayChannel(-1, coin_sound, 0);
 			}
 

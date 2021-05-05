@@ -16,6 +16,9 @@ static SDL_Event g_event;
 
 //Audio
 static Mix_Music* g_music = NULL;
+
+static Mix_Chunk* g_win_sound = NULL;
+static Mix_Chunk* g_lose_sound = NULL;
 static Mix_Chunk* g_bullet_sound[2];
 static Mix_Chunk* g_explosion_sound = NULL;
 static Mix_Chunk* g_playerdie_sound = NULL;
@@ -52,7 +55,6 @@ struct Map
 	int max_y_;
 
 	int tile[MAX_MAP_Y][MAX_MAP_X];
-	char* file_name_;
 };
 
 //Movement

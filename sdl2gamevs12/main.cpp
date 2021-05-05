@@ -68,9 +68,12 @@ bool Init()
     g_playerdie_sound = Mix_LoadWAV("sound//ha.wav");
     g_explosion_sound = Mix_LoadWAV("sound//exp.wav");
     g_coin_sound = Mix_LoadWAV("sound//coin.wav");
+    g_win_sound = Mix_LoadWAV("sound//win.wav");
+    g_lose_sound = Mix_LoadWAV("sound//lose.wav");
 
     if (g_music == NULL || g_bullet_sound[1] == NULL || g_bullet_sound[2] == NULL
-        || g_playerdie_sound == NULL || g_explosion_sound == NULL || g_coin_sound == NULL)
+        || g_playerdie_sound == NULL || g_explosion_sound == NULL || g_coin_sound == NULL
+        || g_win_sound == NULL || g_lose_sound == NULL )
     {
         success = false;
     }
@@ -89,7 +92,6 @@ bool LoadBackground()
 
 void Close()
 {
-
     g_background.Free();
   
     SDL_DestroyRenderer(g_screen);
@@ -139,7 +141,7 @@ std::vector<ThreatsObject*> MakeThreatList()
             p_threat->SetCLips();
             p_threat->set_type_move(ThreatsObject::STATIC_THREAT);
             p_threat->set_input_left(0);
-            p_threat->SetXPos(700 + i * 1200);
+            p_threat->SetXPos(750 + i * 1200);
             p_threat->SetYPos(250);
 
             BulletObj* t_bullet = new BulletObj;
@@ -217,6 +219,7 @@ int main(int argc, char* argv[])
     int num_life = 3;
     int num_fall = 0;
     int num_bullet_hit = 0;
+    int flags_cnt = 0;
 
     IMG_DISPLAY player_life;
     player_life.Init(g_screen);
@@ -278,8 +281,7 @@ int main(int argc, char* argv[])
                         isCol1 = SDLCommonFunc::CheckCollision(pt_bullet->GetRect(), rect_player);
                         if (isCol1 == true)
                         {
-                            //p_threat->RemoveBulletHit(k);
-                            //break;
+                            ;
                         }
                     }
                 }
@@ -380,21 +382,41 @@ int main(int argc, char* argv[])
         time_game.LoadToRender(time_font, g_screen);
         time_game.RenderText(g_screen, SCREEN_WIDTH - 200, 10);
 
-
         num_fall = p_player.get_fall_count();
         num_life = 4 - num_fall - num_bullet_hit;
 
         player_life.setNum(num_life);
 
+        flags_cnt = p_player.get_flags();
 
         SDL_RenderPresent(g_screen);
+
+        if (flags_cnt == 2)
+        {
+            Mix_PauseMusic();
+            Mix_PlayChannel(-1, g_win_sound, 0);
+            g_background.Free();
+            SDL_RenderClear(g_screen);
+            g_background.LoadImg("img//win.png", g_screen);
+            g_background.Render(g_screen, NULL);
+            SDL_RenderPresent(g_screen);
+            SDL_Delay(5000);
+            if (MessageBox(NULL, L"YOU WIN", L"INFO", MB_OK | MB_ICONSTOP) == IDOK)
+            {
+                Close();
+                SDL_Quit();
+                return 0;
+            }
+
+        }
 
         if (num_life == 0)
         {
             Mix_PauseMusic();
+            Mix_PlayChannel(-1, g_lose_sound, 0);
             g_background.Free();
             SDL_RenderClear(g_screen);
-            g_background.LoadImg("img//overtest.png", g_screen);
+            g_background.LoadImg("img//lost.png", g_screen);
             g_background.Render(g_screen, NULL);
             SDL_RenderPresent(g_screen);
             SDL_Delay(2000);

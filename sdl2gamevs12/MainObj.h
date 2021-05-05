@@ -13,6 +13,7 @@
 #define MAX_FRAME_CLIP 8
 #define MONEY_TILE 290
 #define LIFE_TILE 292
+#define FLAGS_TILE 294
 
 
 class MainObj : public BaseObject
@@ -56,10 +57,12 @@ public:
     void IncreaseMoney();
     void IncreaseLife();
     void IncreaseFallCount();
+    void IncreaseFlags();
 
     int get_width_frame() const { return width_frame_; }
     int get_height_frame() const { return height_frame_; }
 
+    int get_flags() const { return flags_count; }
     int get_fall_count() const {return fall_count; }
     int get_coin_count() const { return money_count; }
     void set_comeback_time(const int& cb_time) { come_back_time_ = cb_time;}
@@ -90,6 +93,7 @@ private:
 
     int money_count;
     int fall_count;
+    int flags_count;
 };
 
 #endif

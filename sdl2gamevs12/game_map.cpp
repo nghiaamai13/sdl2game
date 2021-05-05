@@ -11,8 +11,8 @@ bool GameMap::LoadMap(const char* name)
 		return false;
 	}
 
-	game_map_.max_x_=0;
-	game_map_.max_y_=0;
+	game_map_.max_x_ = 0;
+	game_map_.max_y_ = 0;
 
 	for (int i = 0; i < MAX_MAP_Y; i++)
 	{
@@ -39,7 +39,6 @@ bool GameMap::LoadMap(const char* name)
 	game_map_.start_x_ = 0;
 	game_map_.start_y_ = 0;
 
-	//game_map_.file_name_ = name;
 	fclose(fp);
 
     return true;
@@ -62,7 +61,6 @@ void GameMap::LoadTiles(SDL_Renderer* screen)
 		fclose(fp);
 		tile_mat[i].LoadImg(file_img, screen);
 	}
-
 }
 
 void GameMap::DrawMap(SDL_Renderer* screen)
